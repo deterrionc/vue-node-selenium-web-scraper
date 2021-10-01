@@ -74,7 +74,7 @@
       ...mapActions(['scrapeMatchesTodayTips25', 'getMatchesTodayTips25']),
       setTrRisk (risk) {
         // console.log(risk)
-        if (risk === 'Good') return 'select'
+        if (risk === 'Good T1' || risk === 'Good T2') return 'select'
         if (risk === 'Great') return 'highRisk'
         return ''
       }
