@@ -238,17 +238,13 @@ const getMatchesForEmail = async () => {
 
   var emailContentToCustomer = {
     from: 'Fyrebets <info@fyrebets.com>',
-    to: 'ilia@siliconslopesconsulting.com',
+    to: 'wwdev0807@gmail.com',
     subject: 'Test Alert',
     text: `Test Alert For Matches Info.`
   }
 
   mailgun.messages().send(emailContentToCustomer, function (error, body) {
     console.log(body)
-  })
-
-  res.json({
-    success: true
   })
 }
 
