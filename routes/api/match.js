@@ -241,9 +241,9 @@ const getMatchesForEmail = async () => {
 
     var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < matchesForSend.length; matchIndex++) {
-      var match = matchesForSend[matchIndex]
-      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team\n\n'))
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
+      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
@@ -254,13 +254,12 @@ const getMatchesForEmail = async () => {
         subject: "Don't miss the change. There are matches to bet.",
         text: emailText
       }
-      console.log(emailContentToCustomer)
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
     }
   }
 
-  // mailgun.messages().send(emailContentToCustomer, function (error, body) {
-  //   console.log(body)
-  // })
 }
 
 router.get('/getMatches', async (req, res) => {
