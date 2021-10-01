@@ -46,33 +46,31 @@ const sendCustomersEmailGoodMatches = async () => {
     matches.push(match)
   }
 
-  console.log(matches)
+  var matchesForEmail = matches.filter(match => match.risk === 'Good T1' || match.risk === 'Good T2' || match.risk === 'Great')
 
-  // var matchesForEmail = matches.filter(match => match.risk === 'Good' || match.risk === 'Great')
+  if (matchesForEmail.length) {
+    var users = await User.find()
 
-  // if (matchesForEmail.length) {
-  //   var users = await User.find()
+    var emailText = ''
 
-  //   var emailText = ''
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
+      emailText += (match.homeTeam + ' vs ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 5 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
+    }
 
-  //   for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
-  //     var match = matchesForEmail[matchIndex]
-  //     emailText += (match.homeTeam + ' vs ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 5 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
-  //   }
-
-  //   for (var userIndex = 0; userIndex < users.length; userIndex++) {
-  //     var user = users[userIndex]
-  //     var emailContentToCustomer = {
-  //       from: 'Fyrebets <info@fyrebets.com>',
-  //       to: user.email,
-  //       subject: "Don't miss the change. There are matches to bet.",
-  //       text: emailText
-  //     }
-  //     mailgun.messages().send(emailContentToCustomer, function (error, body) {
-  //       console.log(body)
-  //     })
-  //   }
-  // }
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Don't miss the change. There are matches to bet.",
+        text: emailText
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
+    }
+  }
 }
 
 router.get('/getMatches', async (req, res) => {
