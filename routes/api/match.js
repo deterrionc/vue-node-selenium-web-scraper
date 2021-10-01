@@ -241,9 +241,9 @@ const getMatchesForEmail = async () => {
 
     var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+    for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
       var match = matchesForEmail[matchIndex]
-      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + ' | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team\n\n'))
+      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team\n\n'))
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
