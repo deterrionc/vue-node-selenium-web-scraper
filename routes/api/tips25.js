@@ -81,11 +81,11 @@ router.get('/getMatches', async (req, res) => {
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
     if (match.h1 >= 24 && match.a1 >= 24) {
-      match.risk = 'Good'
+      match.risk = 'Good T1'
     } else if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
       match.risk = 'Great'
     } else if (match.probability >= 85) {
-      match.risk = 'Good'
+      match.risk = 'Good T2'
     }
     matches.push(match)
   }
@@ -153,7 +153,7 @@ const scrapeMatchesToday = async () => {
     })
     await newMatch.save()
   }
-  
+
   await sendCustomersEmailGoodMatches()
 }
 
