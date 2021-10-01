@@ -75,7 +75,6 @@ const sendCustomersEmailGoodMatches = async () => {
 
 router.get('/getMatches', async (req, res) => {
   console.log('GET MATCHES TIPS 25')
-  await sendCustomersEmailGoodMatches()
   var matchesFromDB = await Match25Tip.find({ IsNew: true })
   var matches = []
 
@@ -154,6 +153,8 @@ const scrapeMatchesToday = async () => {
     })
     await newMatch.save()
   }
+  
+  await sendCustomersEmailGoodMatches()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {

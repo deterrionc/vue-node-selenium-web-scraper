@@ -35,7 +35,7 @@ options.addArguments(
 
 const fs = require('fs')
 
-const getMatchesForEmail = async () => {
+const sendCustomersEmailGoodMatches = async () => {
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
   var matches = await Match.find({ IsNew: true, active: true })
   var matchesForSend = []
@@ -664,7 +664,7 @@ const scrapeMatchesToday = async () => {
   await driver.close()
   await driver.quit()
 
-  await getMatchesForEmail()
+  await sendCustomersEmailGoodMatches()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {
