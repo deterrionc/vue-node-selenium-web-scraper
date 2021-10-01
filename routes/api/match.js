@@ -64,14 +64,14 @@ const getMatchesForEmail = async () => {
           if (oddsData.homeMove === 'up' && oddsData.active) {
             homeCounter++
           }
-  
+
           if (oddsData.awayMove === 'up' && oddsData.active) {
             awayCounter++
           }
         }
-  
+
         match.select = null
-  
+
         if ((homeCounter === oddsDatas.length || awayCounter === oddsDatas.length) && oddsDatas.length > 7) {
           match.risk = 'Good'
           if (homeCounter > 0) {
@@ -82,7 +82,7 @@ const getMatchesForEmail = async () => {
           }
         }
       }
-  
+
       if (blockedOddsDatas.length > 0) {
         // RULE4-A! BLOCKED ODDS, NO ARROW CHANGE, ALL UP OR DOWN
         var noArrows = 0
@@ -100,14 +100,14 @@ const getMatchesForEmail = async () => {
             if (oddsData.homeMove === 'up' && oddsData.active) {
               homeCounter++
             }
-  
+
             if (oddsData.awayMove === 'up' && oddsData.active) {
               awayCounter++
             }
           }
-  
+
           match.select = null
-  
+
           if ((homeCounter === (oddsDatas.length - blockedOddsDatas.length) || awayCounter === (oddsDatas.length - blockedOddsDatas.length)) && oddsDatas.length > 7) {
             match.risk = 'Good'
             if (homeCounter > 0) {
@@ -119,7 +119,7 @@ const getMatchesForEmail = async () => {
           }
         }
       }
-  
+
       if (blockedOddsDatas.length === 1) {
         if (blockedOddsDatas[0].homeMove !== '' && blockedOddsDatas[0].awayMove !== '') {
           // RULE4-B! 1 BLOCKED ODD, ARROW CHANGE, 888.com, ALL UP OR DOWN
@@ -131,14 +131,14 @@ const getMatchesForEmail = async () => {
               if (oddsData.homeMove === 'up' && oddsData.active) {
                 homeCounter++
               }
-  
+
               if (oddsData.awayMove === 'up' && oddsData.active) {
                 awayCounter++
               }
             }
-  
+
             match.select = null
-  
+
             if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
               match.risk = 'Good'
               if (homeCounter > 0) {
@@ -158,14 +158,14 @@ const getMatchesForEmail = async () => {
               if (oddsData.homeMove === 'up' && oddsData.active) {
                 homeCounter++
               }
-  
+
               if (oddsData.awayMove === 'up' && oddsData.active) {
                 awayCounter++
               }
             }
-  
+
             match.select = null
-  
+
             if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
               match.risk = 'Good'
               if (homeCounter > 0) {
@@ -188,7 +188,7 @@ const getMatchesForEmail = async () => {
           match.select = ''
         }
       }
-  
+
       if (blockedOddsDatas.length >= 2) {
         // RULE4-D! 
         var homeCounter = 0
@@ -198,14 +198,14 @@ const getMatchesForEmail = async () => {
           if (oddsData.homeMove === 'up' && oddsData.active) {
             homeCounter++
           }
-  
+
           if (oddsData.awayMove === 'up' && oddsData.active) {
             awayCounter++
           }
         }
-  
+
         match.select = null
-  
+
         if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
           match.risk = 'Good'
           if (homeCounter > 0) {
@@ -234,18 +234,33 @@ const getMatchesForEmail = async () => {
     matchesForSend.push(match)
   }
 
-  var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good' || match.risk === 'High Risk')
+  var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good')
 
-  var emailContentToCustomer = {
-    from: 'Fyrebets <info@fyrebets.com>',
-    to: 'wwdev0807@gmail.com',
-    subject: 'Test Alert',
-    text: `Test Alert For Matches Info.`
+  if (matchesForEmail.length) {
+    var users = await User.find()
+
+    var emailText = ''
+
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
+      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + ' | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team\n\n'))
+    }
+
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Don't miss the change. There are matches to bet.",
+        text: emailText
+      }
+      console.log(emailContentToCustomer)
+    }
   }
 
-  mailgun.messages().send(emailContentToCustomer, function (error, body) {
-    console.log(body)
-  })
+  // mailgun.messages().send(emailContentToCustomer, function (error, body) {
+  //   console.log(body)
+  // })
 }
 
 router.get('/getMatches', async (req, res) => {
@@ -279,14 +294,14 @@ router.get('/getMatches', async (req, res) => {
           if (oddsData.homeMove === 'up' && oddsData.active) {
             homeCounter++
           }
-  
+
           if (oddsData.awayMove === 'up' && oddsData.active) {
             awayCounter++
           }
         }
-  
+
         match.select = null
-  
+
         if ((homeCounter === oddsDatas.length || awayCounter === oddsDatas.length) && oddsDatas.length > 7) {
           match.risk = 'Good'
           if (homeCounter > 0) {
@@ -297,7 +312,7 @@ router.get('/getMatches', async (req, res) => {
           }
         }
       }
-  
+
       if (blockedOddsDatas.length > 0) {
         // RULE4-A! BLOCKED ODDS, NO ARROW CHANGE, ALL UP OR DOWN
         var noArrows = 0
@@ -315,14 +330,14 @@ router.get('/getMatches', async (req, res) => {
             if (oddsData.homeMove === 'up' && oddsData.active) {
               homeCounter++
             }
-  
+
             if (oddsData.awayMove === 'up' && oddsData.active) {
               awayCounter++
             }
           }
-  
+
           match.select = null
-  
+
           if ((homeCounter === (oddsDatas.length - blockedOddsDatas.length) || awayCounter === (oddsDatas.length - blockedOddsDatas.length)) && oddsDatas.length > 7) {
             match.risk = 'Good'
             if (homeCounter > 0) {
@@ -334,7 +349,7 @@ router.get('/getMatches', async (req, res) => {
           }
         }
       }
-  
+
       if (blockedOddsDatas.length === 1) {
         if (blockedOddsDatas[0].homeMove !== '' && blockedOddsDatas[0].awayMove !== '') {
           // RULE4-B! 1 BLOCKED ODD, ARROW CHANGE, 888.com, ALL UP OR DOWN
@@ -346,14 +361,14 @@ router.get('/getMatches', async (req, res) => {
               if (oddsData.homeMove === 'up' && oddsData.active) {
                 homeCounter++
               }
-  
+
               if (oddsData.awayMove === 'up' && oddsData.active) {
                 awayCounter++
               }
             }
-  
+
             match.select = null
-  
+
             if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
               match.risk = 'Good'
               if (homeCounter > 0) {
@@ -373,14 +388,14 @@ router.get('/getMatches', async (req, res) => {
               if (oddsData.homeMove === 'up' && oddsData.active) {
                 homeCounter++
               }
-  
+
               if (oddsData.awayMove === 'up' && oddsData.active) {
                 awayCounter++
               }
             }
-  
+
             match.select = null
-  
+
             if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
               match.risk = 'Good'
               if (homeCounter > 0) {
@@ -403,7 +418,7 @@ router.get('/getMatches', async (req, res) => {
           match.select = ''
         }
       }
-  
+
       if (blockedOddsDatas.length >= 2) {
         // RULE4-D! 
         var homeCounter = 0
@@ -413,14 +428,14 @@ router.get('/getMatches', async (req, res) => {
           if (oddsData.homeMove === 'up' && oddsData.active) {
             homeCounter++
           }
-  
+
           if (oddsData.awayMove === 'up' && oddsData.active) {
             awayCounter++
           }
         }
-  
+
         match.select = null
-  
+
         if ((homeCounter >= oddsDatas.length - 1 || awayCounter >= oddsDatas.length - 1) && oddsDatas.length > 7) {
           match.risk = 'Good'
           if (homeCounter > 0) {
