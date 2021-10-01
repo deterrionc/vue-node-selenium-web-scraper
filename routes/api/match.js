@@ -34,6 +34,17 @@ options.addArguments(
 // const htmlTable = require('./data')
 
 const fs = require('fs')
+const deleteMatchNameSpan = (matchName) => {
+  var teamNames = matchName.split(' - ')
+  for (var i = 0; i < teamNames.length; i++) {
+    var teamName = teamNames[i]
+    if (teamName.indexOf('</span>') > 0) {
+      teamName = teamName.slice(teamName.indexOf('">') + 2, teamName.indexOf('</'))
+    }
+    teamNames[i] = teamName
+  }
+  return (teamNames[0] + ' - ' + teamNames[1])
+}
 
 const sendCustomersEmailGoodMatches = async () => {
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
@@ -243,7 +254,8 @@ const sendCustomersEmailGoodMatches = async () => {
 
     for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
       var match = matchesForEmail[matchIndex]
-      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+      deleteMatchNameSpan(match.name)
+      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
