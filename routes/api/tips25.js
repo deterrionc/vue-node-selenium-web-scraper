@@ -6,6 +6,11 @@ const schedule = require('node-schedule')
 const Match25Tip = require('../../models/Match25Tip')
 const User = require('../../models/User')
 
+// Mailgun Info
+const mailgunApiKey = config.get('mailgun.mailgunApiKey')
+const mailgunDomain = config.get('mailgun.domain')
+var mailgun = require('mailgun-js')({ apiKey: mailgunApiKey, domain: mailgunDomain })
+
 const webdriver = require('selenium-webdriver')
 const chromeDriver = require('selenium-webdriver/chrome')
 const path = require('chromedriver').path
