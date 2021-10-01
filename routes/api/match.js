@@ -235,7 +235,21 @@ const getMatchesForEmail = async () => {
   }
 
   var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good' || match.risk === 'High Risk')
-  console.log(matchesForEmail)
+
+  var emailContentToCustomer = {
+    from: 'Fyrebets <info@fyrebets.com>',
+    to: 'ilia@siliconslopesconsulting.com',
+    subject: 'Test Alert',
+    text: `Test Alert For Matches Info.`
+  }
+
+  mailgun.messages().send(emailContentToCustomer, function (error, body) {
+    console.log(body)
+  })
+
+  res.json({
+    success: true
+  })
 }
 
 router.get('/getMatches', async (req, res) => {
