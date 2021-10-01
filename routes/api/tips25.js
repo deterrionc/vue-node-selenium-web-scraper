@@ -4,6 +4,7 @@ const axios = require('axios')
 const schedule = require('node-schedule')
 
 const Match25Tip = require('../../models/Match25Tip')
+const User = require('../../models/User')
 
 const webdriver = require('selenium-webdriver')
 const chromeDriver = require('selenium-webdriver/chrome')
@@ -21,6 +22,49 @@ options.addArguments(
 )
 
 const htmlContent = require('./data')
+
+const sendCustomersEmailGoodMatches = async () => {
+  var matchesFromDB = await Match25Tip.find({ IsNew: true })
+  var matches = []
+
+  for (var i = 0; i < matchesFromDB.length; i++) {
+    var match = { ...matchesFromDB[i]._doc }
+    if (match.h1 >= 24 && match.a1 >= 24) {
+      match.risk = 'Good T1'
+    } else if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
+      match.risk = 'Great'
+    } else if (match.probability >= 85) {
+      match.risk = 'Good T2'
+    }
+    matches.push(match)
+  }
+
+  var matchesForEmail = matches.filter(match => match.risk === 'Good' || match.risk === 'Great')
+
+  if (matchesForEmail.length) {
+    var users = await User.find()
+
+    var emailText = ''
+
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
+      emailText += (match.homeTeam + ' vs ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 5 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
+    }
+
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Don't miss the change. There are matches to bet.",
+        text: emailText
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
+    }
+  }
+}
 
 router.get('/getMatches', async (req, res) => {
   console.log('GET MATCHES TIPS 25')
@@ -51,7 +95,7 @@ rule.minute = 3
 const j = schedule.scheduleJob(rule, () => {
   const date = new Date()
   if (date.getHours() % 2 === 0) {
-    experiment()
+    scrapeMatchesToday()
   }
 })
 
@@ -68,7 +112,7 @@ const changeTimeToEst = (time) => {
   return hour
 }
 
-const experiment = async () => {
+const scrapeMatchesToday = async () => {
   console.log('scrape matches on daily over tips')
 
   await Match25Tip.deleteMany({ IsNew: false })
@@ -105,8 +149,7 @@ const experiment = async () => {
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {
-  // await scrapeMatchesToday()
-  await experiment()
+  await scrapeMatchesToday()
 
   res.json({
     success: true

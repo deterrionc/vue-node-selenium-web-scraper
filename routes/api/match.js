@@ -263,7 +263,6 @@ const getMatchesForEmail = async () => {
 }
 
 router.get('/getMatches', async (req, res) => {
-  await getMatchesForEmail()
   console.log('Get Matches')
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
   var matches = await Match.find({ IsNew: true, active: true })
@@ -664,6 +663,8 @@ const scrapeMatchesToday = async () => {
 
   await driver.close()
   await driver.quit()
+
+  await getMatchesForEmail()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {
