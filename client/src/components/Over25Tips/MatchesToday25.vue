@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Time(GMT - 5)</th>
+                <th>Time(GMT - 4)</th>
                 <th>Country League</th>
                 <th>Match</th>
                 <th>H1</th>

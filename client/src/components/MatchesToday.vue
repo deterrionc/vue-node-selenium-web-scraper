@@ -25,7 +25,7 @@
                 <th width='5%'>No</th>
                 <th width='20%'>Country » League</th>
                 <th width='25%'>Match</th>
-                <th width='15%'>Time(GMT - 5)</th>
+                <th width='15%'>Time(GMT - 4)</th>
                 <th width='10%'>Score</th>
                 <th width='10%'>Home</th>
                 <th width='10%'>X</th>

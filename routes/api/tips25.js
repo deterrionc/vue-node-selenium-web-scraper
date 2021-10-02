@@ -55,7 +55,7 @@ const sendCustomersEmailGoodMatches = async () => {
 
     for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
       var match = matchesForEmail[matchIndex]
-      emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 5 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
+      emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {

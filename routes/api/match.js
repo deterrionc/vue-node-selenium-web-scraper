@@ -255,7 +255,7 @@ const sendCustomersEmailGoodMatches = async () => {
     for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
       var match = matchesForEmail[matchIndex]
       deleteMatchNameSpan(match.name)
-      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 5) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {

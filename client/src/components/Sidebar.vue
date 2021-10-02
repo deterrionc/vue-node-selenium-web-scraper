@@ -2,7 +2,7 @@
   <div class="col-md-2 p-2" style="background-color: #3f51b5; min-height: 100vh;">
     <div class="mb-5">
       <div class="container-fluid">
-        <h5 class="text-center text-white">oddsportal.com</h5>
+        <h6 class="text-center text-white">oddsportal.com</h6>
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('bookmakers')"
             v-bind:class="currentMatch === 'bookmakers' ? 'btn-light' : 'btn-success'">
@@ -22,7 +22,7 @@
           </button>
         </div>
         <hr style="color: white; height: 3px;">
-        <h5 class="text-center text-white">over25tips.com</h5>
+        <h6 class="text-center text-white">Over/Under Strategy</h6>
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesToday25Tips')"
           v-bind:class="currentMatch === 'matchesToday25Tips' ? 'btn-light' : 'btn-success'">

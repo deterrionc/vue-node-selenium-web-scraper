@@ -17,7 +17,7 @@
               <th>Country</th>
               <th>League</th>
               <th>Match</th>
-              <th>Time(GMT - 5)</th>
+              <th>Time(GMT - 4)</th>
               <th>Score</th>
               <th>Home</th>
               <th>X</th>
