@@ -108,7 +108,7 @@ const j = schedule.scheduleJob(rule, () => {
 
 const changeTimeToEst = (time) => {
   var hour = time.slice(0, 2)
-  hour = hour - 5
+  hour = hour - 4
   if (hour < 0) {
     hour += 24
   }
