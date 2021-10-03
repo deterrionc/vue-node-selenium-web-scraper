@@ -2,7 +2,7 @@
   <div class="col-md-2 p-2" style="background-color: #3f51b5; min-height: 100vh;">
     <div class="mb-5">
       <div class="container-fluid">
-        <h6 class="text-center text-white">Asian Handicap 0 Soccer Strategy</h6>
+        <h6 class="text-center text-white">Asian Handicap 0 Soccer Strategy1</h6>
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('bookmakers')"
             v-bind:class="currentMatch === 'bookmakers' ? 'btn-light' : 'btn-success'">
