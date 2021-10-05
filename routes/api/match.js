@@ -571,10 +571,10 @@ async function scrapeMatchDetail(driver, link, matchID) {
   // await driver.close()
 }
 
-const rule = new schedule.RecurrenceRule()
-rule.minute = 59
+const ruleForScrape = new schedule.RecurrenceRule()
+ruleForScrape.minute = 59
 
-const j = schedule.scheduleJob(rule, () => {
+const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
   const date = new Date()
   if (date.getHours() % 2) {
     scrapeMatchesToday()
@@ -676,7 +676,7 @@ const scrapeMatchesToday = async () => {
   await driver.close()
   await driver.quit()
 
-  await sendCustomersEmailGoodMatches()
+  // await sendCustomersEmailGoodMatches()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {

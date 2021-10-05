@@ -154,7 +154,7 @@ const scrapeMatchesToday = async () => {
     await newMatch.save()
   }
 
-  await sendCustomersEmailGoodMatches()
+  // await sendCustomersEmailGoodMatches()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {
