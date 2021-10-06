@@ -100,9 +100,9 @@ const composeWatchList = async (matches = []) => {
     var exist = watchListForCompare.find(element => element.name === match.name)
     if (exist === undefined) {
       // NOT VALID
-      match.emailSent = true
       match.risk = 'Not Valid'
       invalidMatches.push(match)
+      match.emailSent = true
     }
   }
 
