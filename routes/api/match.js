@@ -610,7 +610,47 @@ router.get('/getMatchDetail/:id', async (req, res) => {
   })
 })
 
+const ruleForMatch1 = new schedule.RecurrenceRule()
+ruleForMatch1.second = 10
 
+const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
+  var newDate = new Date()
+  var hour = newDate.getHours()
+  var minute = newDate.getMinutes()
+
+  for (var i = 0; i < watchList.length; i++) {
+    var match = watchList[i]
+    if (match.time.length === 5) {
+      console.log('ok')
+      var matchHour = match.time.slice(0, 2)
+      var matchMinute = match.time.slice(3, 5)
+      if (Number(matchHour) == hour && (minute - Number(matchMinute)) < 30) {
+
+      }
+    }
+  }
+})
+
+const ruleForMatch2 = new schedule.RecurrenceRule()
+ruleForMatch2.minute = 25
+
+const scheduleForMatch2 = schedule.scheduleJob(ruleForMatch2, () => {
+
+})
+
+const ruleForMatch3 = new schedule.RecurrenceRule()
+ruleForMatch3.minute = 40
+
+const scheduleForMatch3 = schedule.scheduleJob(ruleForMatch3, () => {
+
+})
+
+const ruleForMatch4 = new schedule.RecurrenceRule()
+ruleForMatch4.minute = 55
+
+const scheduleForMatch4 = schedule.scheduleJob(ruleForMatch4, () => {
+
+})
 
 const ruleForScrape = new schedule.RecurrenceRule()
 ruleForScrape.minute = 5
