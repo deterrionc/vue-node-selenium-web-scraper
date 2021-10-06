@@ -131,12 +131,15 @@ const composeWatchList = async (matches = []) => {
     var temp = watchListForCompare.find(element => element.name === match.name)
     if (temp === undefined) {
       // NOT VALID
-      // SEND EMAIL 
+      if (match.emailSent !== true) {
+        // SEND EMAIL 
+        console.log(match)
+        console.log('Send Email')
+      }
       
       match.emailSent = true
     }
   }
-  console.log(watchList)
 }
 
 const getGoodMatches = async () => {
