@@ -615,6 +615,7 @@ ruleForMatch1.second = 10
 
 const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
   var newDate = new Date()
+  console.log(newDate)
   var hour = newDate.getHours()
   var minute = newDate.getMinutes()
 
