@@ -374,9 +374,9 @@ const sendCustomersEmailGoodMatches = async () => {
         subject: "Don't miss the change. There are matches to bet.",
         text: emailText
       }
-      // mailgun.messages().send(emailContentToCustomer, function (error, body) {
-      //   console.log(body)
-      // })
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
     }
   }
 }
