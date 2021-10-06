@@ -65,7 +65,8 @@ const composeWatchList = async (matches = []) => {
       time: matches[i].time,
       risk: matches[i].risk,
       select: matches[i].select,
-      link: matches[i].link
+      link: matches[i].link,
+      _id: matches[i]._id
     }
     watchListForCompare.push(match)
   }
@@ -610,32 +611,28 @@ router.get('/getMatchDetail/:id', async (req, res) => {
   })
 })
 
-const ruleForMatch1 = new schedule.RecurrenceRule()
-ruleForMatch1.second = 10
-
-var newDate = new Date()
-console.log(newDate)
-var hour = newDate.getHours()
-console.log(hour)
-
-const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
+const scrapeOnMatchTimeForValidCheck = async () => {
   var newDate = new Date()
-  console.log(newDate)
   var hour = newDate.getHours()
-  console.log(hour)
   var minute = newDate.getMinutes()
 
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
     if (match.time.length === 5) {
-      console.log('ok')
       var matchHour = match.time.slice(0, 2)
       var matchMinute = match.time.slice(3, 5)
-      if (Number(matchHour) == hour && (minute - Number(matchMinute)) < 30) {
-
+      if (Number(matchHour) == hour && (minute - Number(matchMinute)) < 15) {
+        console.log(match)
       }
     }
   }
+}
+
+const ruleForMatch1 = new schedule.RecurrenceRule()
+ruleForMatch1.minute = 10
+
+const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
+  scrapeOnMatchTimeForValidCheck()
 })
 
 const ruleForMatch2 = new schedule.RecurrenceRule()
