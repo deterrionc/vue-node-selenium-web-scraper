@@ -108,6 +108,8 @@ const composeWatchList = async (matches = []) => {
 
   var emailText = ''
 
+  console.log(invalidMatches.length)
+
   for (var matchIndex = 0; matchIndex < invalidMatches.length; matchIndex++) {
     var match = invalidMatches[matchIndex]
     if (match.emailSent !== true) {
@@ -370,9 +372,9 @@ const sendCustomersEmailGoodMatches = async () => {
         subject: "Don't miss the change. There are matches to bet.",
         text: emailText
       }
-      mailgun.messages().send(emailContentToCustomer, function (error, body) {
-        console.log(body)
-      })
+      // mailgun.messages().send(emailContentToCustomer, function (error, body) {
+      //   console.log(body)
+      // })
     }
   }
 }
