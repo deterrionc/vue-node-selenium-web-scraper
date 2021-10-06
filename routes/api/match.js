@@ -125,16 +125,23 @@ const composeWatchList = async (matches = []) => {
     watchListForCompare.push(match)
   }
 
+  var newDate = new Date()
+  var hour = newDate.getHours()
+  var minute = newDate.getMinutes()
+
   console.log(watchList.length)
+
   watchList = watchList.filter(element => {
     console.log(element.time)
-    if (element.name.length > 0) {
-      return true
+    if (element.time.length === 5) {
+      if (element.time.slice(0, 2) >= hour && element.time.slice(3, 5) > minute) {
+        return true
+      }
     }
   })
 
   console.log(watchList.length)
-  
+
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
     var temp = watchListForCompare.find(element => element.name === match.name)
@@ -143,7 +150,7 @@ const composeWatchList = async (matches = []) => {
       if (match.emailSent !== true) {
         // SEND EMAIL 
       }
-      
+
       match.emailSent = true
     }
   }
