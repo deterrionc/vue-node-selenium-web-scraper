@@ -616,6 +616,23 @@ const scrapeOnMatchTimeForValidCheck = async () => {
   var hour = newDate.getHours()
   var minute = newDate.getMinutes()
 
+  const driver = await new webdriver.Builder()
+    .withCapabilities(webdriver.Capabilities.chrome())
+    .forBrowser('chrome')
+    .setChromeOptions(options)
+    .build()
+
+  await driver.get('https://www.oddsportal.com/login/')
+  await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+  await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+  await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+
+  await driver.get('https://www.oddsportal.com/matches/soccer/')
+  await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+  await driver.findElement(By.linkText('EU Odds')).click()
+
+  var tempWatchListForSet = [...watchList]
+
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
     if (match.time.length === 5) {
@@ -623,9 +640,32 @@ const scrapeOnMatchTimeForValidCheck = async () => {
       var matchMinute = match.time.slice(3, 5)
       if (Number(matchHour) == hour && (minute - Number(matchMinute)) < 15) {
         console.log(match)
+        await scrapeMatchDetail(driver, match.link, match._id)
+        var matches = await getMatches()
+        var goodMatches = matches.filter(element => element.risk === 'Good')
+        var exist = goodMatches.find(element => element._id === match._id)
+        if (exist) {
+          emailText = (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+          var users = await User.find()
+          for (var userIndex = 0; userIndex < users.length; userIndex++) {
+            var user = users[userIndex]
+            var emailContentToCustomer = {
+              from: 'Fyrebets <info@fyrebets.com>',
+              to: user.email,
+              subject: "Valid Match Started.",
+              text: emailText
+            }
+            mailgun.messages().send(emailContentToCustomer, function (error, body) {
+              console.log(body)
+            })
+          }
+        }
+        tempWatchListForSet = tempWatchListForSet.filter(element => element.name != match.name)
       }
     }
   }
+
+  watchList = tempWatchListForSet
 }
 
 const ruleForMatch1 = new schedule.RecurrenceRule()
@@ -774,6 +814,9 @@ const scrapeMatchesToday = async () => {
 
 async function scrapeMatchDetail(driver, link, matchID) {
   var link = link + '/#ah;2;0.00;0'
+
+  await OddsData.deleteMany({ IsNew: false, match: matchID })
+  await OddsData.updateMany({ IsNew: true, match: matchID }, { IsNew: false }, { new: true })
 
   await driver.get(link)
   try {
