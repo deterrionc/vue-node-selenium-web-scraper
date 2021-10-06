@@ -52,7 +52,7 @@ const composeWatchList = async (matches = []) => {
   var watchListForCompare = []
   for (var i = 0; i < matches.length; i++) {
     var match = {
-      name: matches[i].name,
+      name: deleteMatchNameSpan(matches[i].name),
       leagueName: matches[i].leagueName,
       time: matches[i].time,
       risk: matches[i].risk,
@@ -283,7 +283,6 @@ const sendCustomersEmailGoodMatches = async () => {
 
     for (var matchIndex = 0; matchIndex < goodMatches.length; matchIndex++) {
       var match = goodMatches[matchIndex]
-      deleteMatchNameSpan(match.name)
       emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
 
