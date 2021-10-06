@@ -117,6 +117,8 @@ const composeWatchList = async (matches = []) => {
     }
   }
 
+  console.log(emailText)
+
   var users = await User.find()
 
   if (emailText.length > 10) {
