@@ -610,73 +610,7 @@ router.get('/getMatchDetail/:id', async (req, res) => {
   })
 })
 
-async function scrapeMatchDetail(driver, link, matchID) {
-  var link = link + '/#ah;2;0.00;0'
 
-  await driver.get(link)
-  try {
-    var tableMatches = await driver.findElement(By.className('table-main detail-odds sortable'))
-    var tableContent = await tableMatches.getAttribute('innerHTML')
-
-    var htmlTbody = tableContent.split('<tbody>').pop()
-    htmlTbody = htmlTbody.slice(0, htmlTbody.indexOf('</tbody>'))
-    var htmlTrs = htmlTbody.split('<tr')
-    htmlTrs.pop()
-    htmlTrs.shift()
-    for (var i = 0; i < htmlTrs.length; i++) {
-      var htmlTr = htmlTrs[i]
-      var htmlTds = htmlTr.split('<td')
-      htmlTds.shift()
-
-      var bookmaker = htmlTds[0].slice(htmlTds[0].lastIndexOf('link/">') + 7, htmlTds[0].lastIndexOf('</a>&nbsp;'))
-      var active = true
-      if (htmlTds[2].indexOf('dark') > 0) {
-        active = false
-      }
-      var homeOdds = htmlTds[2].slice(htmlTds[2].lastIndexOf('">') + 2, htmlTds[2].indexOf('</'))
-      var homeMove = ''
-      if (htmlTds[2].indexOf('up') > 0) {
-        homeMove = 'up'
-      }
-      if (htmlTds[2].indexOf('down') > 0) {
-        homeMove = 'down'
-      }
-      var awayOdds = htmlTds[3].slice(htmlTds[3].lastIndexOf('">') + 2, htmlTds[3].indexOf('</'))
-      var awayMove = ''
-      if (htmlTds[3].indexOf('up') > 0) {
-        awayMove = 'up'
-      }
-      if (htmlTds[3].indexOf('down') > 0) {
-        awayMove = 'down'
-      }
-      var bookmakerActive = false
-      var bookmakerOnDB = await BookMaker.findOne({
-        WebName: bookmaker,
-        setAsMine: true
-      })
-      if (bookmakerOnDB) {
-        bookmakerActive = true
-      }
-      var newOddsData = new OddsData({
-        match: matchID,
-        bookmaker,
-        bookmakerActive,
-        active,
-        homeOdds,
-        homeMove,
-        awayOdds,
-        awayMove,
-        IsNew: true
-      })
-      await newOddsData.save()
-      console.log('ONE ADDED')
-    }
-  } catch (err) {
-    console.log(err)
-  }
-
-  // await driver.close()
-}
 
 const ruleForScrape = new schedule.RecurrenceRule()
 ruleForScrape.minute = 5
@@ -686,6 +620,14 @@ const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
   if (date.getHours() % 2 === 0) {
     // scrapeMatchesToday()
   }
+})
+
+router.get('/scrapeMatchesToday', async (req, res) => {
+  await scrapeMatchesToday()
+
+  res.json({
+    success: true
+  })
 })
 
 const scrapeMatchesToday = async () => {
@@ -786,13 +728,73 @@ const scrapeMatchesToday = async () => {
   await sendCustomersEmailGoodMatches()
 }
 
-router.get('/scrapeMatchesToday', async (req, res) => {
-  await scrapeMatchesToday()
+async function scrapeMatchDetail(driver, link, matchID) {
+  var link = link + '/#ah;2;0.00;0'
 
-  res.json({
-    success: true
-  })
-})
+  await driver.get(link)
+  try {
+    var tableMatches = await driver.findElement(By.className('table-main detail-odds sortable'))
+    var tableContent = await tableMatches.getAttribute('innerHTML')
+
+    var htmlTbody = tableContent.split('<tbody>').pop()
+    htmlTbody = htmlTbody.slice(0, htmlTbody.indexOf('</tbody>'))
+    var htmlTrs = htmlTbody.split('<tr')
+    htmlTrs.pop()
+    htmlTrs.shift()
+    for (var i = 0; i < htmlTrs.length; i++) {
+      var htmlTr = htmlTrs[i]
+      var htmlTds = htmlTr.split('<td')
+      htmlTds.shift()
+
+      var bookmaker = htmlTds[0].slice(htmlTds[0].lastIndexOf('link/">') + 7, htmlTds[0].lastIndexOf('</a>&nbsp;'))
+      var active = true
+      if (htmlTds[2].indexOf('dark') > 0) {
+        active = false
+      }
+      var homeOdds = htmlTds[2].slice(htmlTds[2].lastIndexOf('">') + 2, htmlTds[2].indexOf('</'))
+      var homeMove = ''
+      if (htmlTds[2].indexOf('up') > 0) {
+        homeMove = 'up'
+      }
+      if (htmlTds[2].indexOf('down') > 0) {
+        homeMove = 'down'
+      }
+      var awayOdds = htmlTds[3].slice(htmlTds[3].lastIndexOf('">') + 2, htmlTds[3].indexOf('</'))
+      var awayMove = ''
+      if (htmlTds[3].indexOf('up') > 0) {
+        awayMove = 'up'
+      }
+      if (htmlTds[3].indexOf('down') > 0) {
+        awayMove = 'down'
+      }
+      var bookmakerActive = false
+      var bookmakerOnDB = await BookMaker.findOne({
+        WebName: bookmaker,
+        setAsMine: true
+      })
+      if (bookmakerOnDB) {
+        bookmakerActive = true
+      }
+      var newOddsData = new OddsData({
+        match: matchID,
+        bookmaker,
+        bookmakerActive,
+        active,
+        homeOdds,
+        homeMove,
+        awayOdds,
+        awayMove,
+        IsNew: true
+      })
+      await newOddsData.save()
+      console.log('ONE ADDED')
+    }
+  } catch (err) {
+    console.log(err)
+  }
+
+  // await driver.close()
+}
 
 router.get('/scrapeLeagues', async (req, res) => {
   console.log('Scrape Leagues')
