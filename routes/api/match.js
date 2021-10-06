@@ -129,7 +129,9 @@ const composeWatchList = async (matches = []) => {
     var match = watchList[i]
     // console.log(match.time)
     var temp = watchListForCompare.find(element => element.name === match.name)
-    console.log(temp)
+    if (temp === undefined) {
+      console.log(temp)
+    }
   }
 }
 
