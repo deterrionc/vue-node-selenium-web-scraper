@@ -33,7 +33,15 @@ options.addArguments(
 
 // const htmlTable = require('./data')
 
-var watchList = []
+var watchList = [
+  {
+    name: 'test match',
+    leagueName: 'test league',
+    time: '22:00',
+    risk: 'Good',
+    select: 'first'
+  }
+]
 
 const fs = require('fs')
 const deleteMatchNameSpan = (matchName) => {
@@ -85,16 +93,42 @@ const composeWatchList = async (matches = []) => {
     }
   })
 
+  var invalidMatches = []
+
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
     var exist = watchListForCompare.find(element => element.name === match.name)
     if (exist === undefined) {
       // NOT VALID
-      if (match.emailSent !== true) {
-        // SEND EMAIL 
-      }
-
       match.emailSent = true
+      match.risk = 'Not Valid'
+      invalidMatches.push(match)
+    }
+  }
+
+  var emailText = ''
+
+  for (var matchIndex = 0; matchIndex < invalidMatches.length; matchIndex++) {
+    var match = invalidMatches[matchIndex]
+    if (match.emailSent !== true) {
+      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+    }
+  }
+
+  var users = await User.find()
+
+  if (emailText.length > 10) {
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Some Matches changed to Invalid.",
+        text: (emailText + 'These matches are still in watch list.')
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
     }
   }
 
