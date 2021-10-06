@@ -134,7 +134,7 @@ const composeWatchList = async (matches = []) => {
   watchList = watchList.filter(element => {
     console.log(element.time)
     if (element.time.length === 5) {
-      if (element.time.slice(0, 2) >= hour && element.time.slice(3, 5) > minute) {
+      if (Number(element.time.slice(0, 2)) >= hour && Number(element.time.slice(3, 5)) > minute) {
         return true
       }
     }
