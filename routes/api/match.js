@@ -48,12 +48,16 @@ const deleteMatchNameSpan = (matchName) => {
   return (teamNames[0] + ' - ' + teamNames[1])
 }
 
+const composeWatchList = async (matches = []) => {
+  var watchListForCompare = []
+}
+
 const getGoodMatches = async () => {
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
-  var matches = await Match.find({ IsNew: true, active: true })
-  var matchesForSend = []
-  for (var i = 0; i < matches.length; i++) {
-    var match = { ...matches[i]._doc }
+  var matchesFromDB = await Match.find({ IsNew: true, active: true })
+  var matches = []
+  for (var i = 0; i < matchesFromDB.length; i++) {
+    var match = { ...matchesFromDB[i]._doc }
     var oddsDatas = await OddsData.find({
       match: match._id,
       bookmakerActive: true,
@@ -247,23 +251,23 @@ const getGoodMatches = async () => {
     matchesForSend.push(match)
   }
 
-  console.log(matchesForSend)
+  console.log(matches)
 
-  var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good')
+  var goodMatches = matches.filter(match => match.risk === 'Good')
 
-  return matchesForEmail
+  return goodMatches
 }
 
 const sendCustomersEmailGoodMatches = async () => {
-  var matchesForEmail = await getGoodMatches()
+  var goodMatches = await getGoodMatches()
 
-  if (matchesForEmail.length) {
+  if (goodMatches.length) {
     var users = await User.find()
 
     var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
-      var match = matchesForEmail[matchIndex]
+    for (var matchIndex = 0; matchIndex < goodMatches.length; matchIndex++) {
+      var match = goodMatches[matchIndex]
       deleteMatchNameSpan(match.name)
       emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
