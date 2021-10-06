@@ -102,19 +102,18 @@ const composeWatchList = async (matches = []) => {
       // NOT VALID
       match.risk = 'Not Valid'
       invalidMatches.push(match)
-      match.emailSent = true
     }
   }
 
   var emailText = ''
 
-  console.log(invalidMatches.length)
-
   for (var matchIndex = 0; matchIndex < invalidMatches.length; matchIndex++) {
     var match = invalidMatches[matchIndex]
-    if (match.emailSent !== true) {
+    var match = watchList.find(element => element.name === match.name)
+    if (match.emailSent === undefined) {
       emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
+    match.emailSent = true
   }
 
   console.log(emailText)
