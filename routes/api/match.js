@@ -53,6 +53,14 @@ const composeWatchList = async (matches = []) => {
 }
 
 const getGoodMatches = async () => {
+  var matches = await getMatches()
+  console.log(matches)
+  var goodMatches = matches.filter(match => match.risk === 'Good')
+
+  return goodMatches
+}
+
+const getMatches = async () => {
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
   var matchesFromDB = await Match.find({ IsNew: true, active: true })
   var matches = []
@@ -248,14 +256,10 @@ const getGoodMatches = async () => {
     }
 
     match.bs = oddsDatas.length
-    matchesForSend.push(match)
+    matches.push(match)
   }
 
-  console.log(matches)
-
-  var goodMatches = matches.filter(match => match.risk === 'Good')
-
-  return goodMatches
+  return matches
 }
 
 const sendCustomersEmailGoodMatches = async () => {
