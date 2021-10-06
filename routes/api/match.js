@@ -613,10 +613,16 @@ router.get('/getMatchDetail/:id', async (req, res) => {
 const ruleForMatch1 = new schedule.RecurrenceRule()
 ruleForMatch1.second = 10
 
+var newDate = new Date()
+console.log(newDate)
+var hour = newDate.getHours()
+console.log(hour)
+
 const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
   var newDate = new Date()
   console.log(newDate)
   var hour = newDate.getHours()
+  console.log(hour)
   var minute = newDate.getMinutes()
 
   for (var i = 0; i < watchList.length; i++) {
