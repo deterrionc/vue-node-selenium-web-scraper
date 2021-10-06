@@ -124,17 +124,21 @@ const composeWatchList = async (matches = []) => {
     }
     watchListForCompare.push(match)
   }
+
+  console.log(watchList.length)
+  watchList = watchList.filter(element => {
+    console.log(element.time)
+  })
+
+  console.log(watchList.length)
   
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
-    // console.log(match.time)
     var temp = watchListForCompare.find(element => element.name === match.name)
     if (temp === undefined) {
       // NOT VALID
       if (match.emailSent !== true) {
         // SEND EMAIL 
-        console.log(match)
-        console.log('Send Email')
       }
       
       match.emailSent = true
