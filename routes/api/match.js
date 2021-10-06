@@ -35,8 +35,8 @@ options.addArguments(
 
 var watchList = [
   {
-    name: 'test match',
-    leagueName: 'test league',
+    name: 'Ronaldo - Messi',
+    leagueName: 'My League',
     time: '22:00',
     risk: 'Good',
     select: 'first'
@@ -64,7 +64,8 @@ const composeWatchList = async (matches = []) => {
       leagueName: matches[i].leagueName,
       time: matches[i].time,
       risk: matches[i].risk,
-      select: matches[i].select
+      select: matches[i].select,
+      link: matches[i].link
     }
     watchListForCompare.push(match)
   }
@@ -116,8 +117,6 @@ const composeWatchList = async (matches = []) => {
     match.emailSent = true
   }
 
-  console.log(emailText)
-
   var users = await User.find()
 
   if (emailText.length > 10) {
@@ -142,6 +141,8 @@ const composeWatchList = async (matches = []) => {
       watchList.push(match)
     }
   }
+
+  console.log(watchList)
 }
 
 const getGoodMatches = async () => {
