@@ -50,12 +50,23 @@ const deleteMatchNameSpan = (matchName) => {
 
 const composeWatchList = async (matches = []) => {
   var watchListForCompare = []
+  for (var i = 0; i < matches.length; i++) {
+    var match = {
+      name: matches[i].name,
+      leagueName: matches[i].leagueName,
+      time: matches[i].time,
+      risk: matches[i].risk,
+      select: matches[i].select
+    }
+    watchListForCompare.push(match)
+  }
+  console.log(watchListForCompare)
 }
 
 const getGoodMatches = async () => {
   var matches = await getMatches()
-  console.log(matches)
   var goodMatches = matches.filter(match => match.risk === 'Good')
+  await composeWatchList(matches)
 
   return goodMatches
 }
