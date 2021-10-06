@@ -33,6 +33,8 @@ options.addArguments(
 
 // const htmlTable = require('./data')
 
+var watchList = []
+
 const fs = require('fs')
 const deleteMatchNameSpan = (matchName) => {
   var teamNames = matchName.split(' - ')
@@ -46,7 +48,7 @@ const deleteMatchNameSpan = (matchName) => {
   return (teamNames[0] + ' - ' + teamNames[1])
 }
 
-const sendCustomersEmailGoodMatches = async () => {
+const getGoodMatches = async () => {
   var exceptionList = ['888sport', 'Unibet', 'Expekt', 'Betclic', 'NordicBet', 'Betsson', 'Betsafe']
   var matches = await Match.find({ IsNew: true, active: true })
   var matchesForSend = []
@@ -245,6 +247,12 @@ const sendCustomersEmailGoodMatches = async () => {
     matchesForSend.push(match)
   }
 
+  return matchesForSend
+}
+
+const sendCustomersEmailGoodMatches = async () => {
+  var matchesForSend = await getGoodMatches()
+
   var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good')
 
   if (matchesForEmail.length) {
@@ -271,7 +279,7 @@ const sendCustomersEmailGoodMatches = async () => {
       })
     }
   }
-
+  console.log('sent')
 }
 
 router.get('/getMatches', async (req, res) => {
@@ -572,12 +580,12 @@ async function scrapeMatchDetail(driver, link, matchID) {
 }
 
 const ruleForScrape = new schedule.RecurrenceRule()
-ruleForScrape.minute = 59
+ruleForScrape.minute = 5
 
 const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
   const date = new Date()
-  if (date.getHours() % 2) {
-    scrapeMatchesToday()
+  if (date.getHours() % 2 === 0) {
+    // scrapeMatchesToday()
   }
 })
 
@@ -676,7 +684,7 @@ const scrapeMatchesToday = async () => {
   await driver.close()
   await driver.quit()
 
-  // await sendCustomersEmailGoodMatches()
+  await sendCustomersEmailGoodMatches()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {

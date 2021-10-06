@@ -97,7 +97,7 @@ router.get('/getMatches', async (req, res) => {
 })
 
 const rule = new schedule.RecurrenceRule()
-rule.minute = 3
+rule.minute = 1
 
 const j = schedule.scheduleJob(rule, () => {
   const date = new Date()
