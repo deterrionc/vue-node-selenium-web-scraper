@@ -129,26 +129,38 @@ const composeWatchList = async (matches = []) => {
   var hour = newDate.getHours()
   var minute = newDate.getMinutes()
 
-  console.log(watchList.length)
+  console.log('Original WatchList', watchList.length)
 
   watchList = watchList.filter(element => {
-    console.log(element.time)
     if (element.time.length === 5) {
-      console.log('OK')
-      console.log(element.time.slice(0, 2))
-      console.log(element.time.slice(3, 5))
       if (element.time.slice(0, 2) > hour || (element.time.slice(0, 2) == hour && element.time.slice(3, 5) > minute)) {
         return true
       }
     }
   })
 
-  console.log(watchList.length)
+  console.log('Current WatchList', watchList.length)
+
+  console.log('Original watchListForCompare', watchListForCompare.length)
+
+  watchListForCompare = watchListForCompare.filter(element => {
+    if (element.time.length === 5) {
+      if (element.time.slice(0, 2) > hour || (element.time.slice(0, 2) == hour && element.time.slice(3, 5) > minute)) {
+        return true
+      }
+    } else {
+      if (element.time.slice(0, 2) > minute) {
+        return true
+      }
+    }
+  })
+
+  console.log('Current watchListForCompare', watchListForCompare.length)
 
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
-    var temp = watchListForCompare.find(element => element.name === match.name)
-    if (temp === undefined) {
+    var exist = watchListForCompare.find(element => element.name === match.name)
+    if (exist === undefined) {
       // NOT VALID
       if (match.emailSent !== true) {
         // SEND EMAIL 
@@ -157,6 +169,16 @@ const composeWatchList = async (matches = []) => {
       match.emailSent = true
     }
   }
+
+  for (var i = 0; i < watchListForCompare.length; i++) {
+    var match = watchListForCompare[i]
+    var exist = watchList.find(element => element.name === match.name)
+    if (exist === undefined) {
+      watchList.push(match)
+    }
+  }
+
+  console.log('Current WatchList', watchList.length)
 }
 
 const getGoodMatches = async () => {
