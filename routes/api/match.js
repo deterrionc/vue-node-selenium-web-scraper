@@ -33,7 +33,78 @@ options.addArguments(
 
 // const htmlTable = require('./data')
 
-var watchList = []
+var watchList = [
+  {
+    name: 'Corinthians - Bahia',
+    leagueName: 'Serie A',
+    time: '00:30',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Nautico - Goias',
+    leagueName: 'Serie B',
+    time: '00:30',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Sudan - Guinea',
+    leagueName: 'World Cup 2022',
+    time: '41',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Brasil de Pelotas - Operario',
+    leagueName: 'Serie B',
+    time: '19:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Morocco - Guinea Bissau',
+    leagueName: 'World Cup 2022',
+    time: '19:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Ceara - Internacional',
+    leagueName: 'Serie A',
+    time: '22:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Sport Recife - Juventude',
+    leagueName: 'Serie A',
+    time: '22:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Chapecoense-SC - Atletico-MG',
+    leagueName: 'Serie A',
+    time: '22:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Atletico GO - Athletico-PR',
+    leagueName: 'Serie A',
+    time: '22:00',
+    risk: undefined,
+    select: null
+  },
+  {
+    name: 'Bragantino - Flamengo RJ',
+    leagueName: 'Serie A',
+    time: '23:30',
+    risk: undefined,
+    select: null
+  }
+]
 
 const fs = require('fs')
 const deleteMatchNameSpan = (matchName) => {
@@ -60,15 +131,17 @@ const composeWatchList = async (matches = []) => {
     }
     watchListForCompare.push(match)
   }
-  console.log(watchListForCompare)
+  
+  for (var i = 0; i < watchList.length; i++) {
+    var match = watchList[i]
+    console.log(match.time)
+  }
 }
 
 const getGoodMatches = async () => {
   var matches = await getMatches()
   var goodMatches = matches.filter(match => match.risk === 'Good')
   await composeWatchList(matches)
-
-  return goodMatches
 }
 
 const getMatches = async () => {
@@ -274,31 +347,31 @@ const getMatches = async () => {
 }
 
 const sendCustomersEmailGoodMatches = async () => {
-  var goodMatches = await getGoodMatches()
+  await getGoodMatches()
 
-  if (goodMatches.length) {
-    var users = await User.find()
+  // if (goodMatches.length) {
+  //   var users = await User.find()
 
-    var emailText = ''
+  //   var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < goodMatches.length; matchIndex++) {
-      var match = goodMatches[matchIndex]
-      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
-    }
+  //   for (var matchIndex = 0; matchIndex < goodMatches.length; matchIndex++) {
+  //     var match = goodMatches[matchIndex]
+  //     emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+  //   }
 
-    for (var userIndex = 0; userIndex < users.length; userIndex++) {
-      var user = users[userIndex]
-      var emailContentToCustomer = {
-        from: 'Fyrebets <info@fyrebets.com>',
-        to: user.email,
-        subject: "Don't miss the change. There are matches to bet.",
-        text: emailText
-      }
-      mailgun.messages().send(emailContentToCustomer, function (error, body) {
-        console.log(body)
-      })
-    }
-  }
+  //   for (var userIndex = 0; userIndex < users.length; userIndex++) {
+  //     var user = users[userIndex]
+  //     var emailContentToCustomer = {
+  //       from: 'Fyrebets <info@fyrebets.com>',
+  //       to: user.email,
+  //       subject: "Don't miss the change. There are matches to bet.",
+  //       text: emailText
+  //     }
+  //     mailgun.messages().send(emailContentToCustomer, function (error, body) {
+  //       console.log(body)
+  //     })
+  //   }
+  // }
   console.log('sent')
 }
 
