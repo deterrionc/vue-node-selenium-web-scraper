@@ -247,13 +247,15 @@ const getGoodMatches = async () => {
     matchesForSend.push(match)
   }
 
-  return matchesForSend
+  console.log(matchesForSend)
+
+  var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good')
+
+  return matchesForEmail
 }
 
 const sendCustomersEmailGoodMatches = async () => {
-  var matchesForSend = await getGoodMatches()
-
-  var matchesForEmail = matchesForSend.filter(match => match.risk === 'Good')
+  var matchesForEmail = await getGoodMatches()
 
   if (matchesForEmail.length) {
     var users = await User.find()
