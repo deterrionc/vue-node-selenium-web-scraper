@@ -639,21 +639,21 @@ const ruleForMatch2 = new schedule.RecurrenceRule()
 ruleForMatch2.minute = 25
 
 const scheduleForMatch2 = schedule.scheduleJob(ruleForMatch2, () => {
-
+  scrapeOnMatchTimeForValidCheck()
 })
 
 const ruleForMatch3 = new schedule.RecurrenceRule()
 ruleForMatch3.minute = 40
 
 const scheduleForMatch3 = schedule.scheduleJob(ruleForMatch3, () => {
-
+  scrapeOnMatchTimeForValidCheck()
 })
 
 const ruleForMatch4 = new schedule.RecurrenceRule()
 ruleForMatch4.minute = 55
 
 const scheduleForMatch4 = schedule.scheduleJob(ruleForMatch4, () => {
-
+  scrapeOnMatchTimeForValidCheck()
 })
 
 const ruleForScrape = new schedule.RecurrenceRule()
