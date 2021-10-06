@@ -91,18 +91,11 @@ var watchList = [
     select: null
   },
   {
-    name: 'Atletico GO - Athletico-PR',
-    leagueName: 'Serie A',
-    time: '22:00',
-    risk: undefined,
-    select: null
-  },
-  {
-    name: 'Bragantino - Flamengo RJ',
-    leagueName: 'Serie A',
-    time: '23:30',
-    risk: undefined,
-    select: null
+    name: 'TEMP',
+    leagueName: 'tempLeague',
+    time: '23:00',
+    risk: 'Good',
+    select: 'first'
   }
 ]
 
@@ -134,7 +127,9 @@ const composeWatchList = async (matches = []) => {
   
   for (var i = 0; i < watchList.length; i++) {
     var match = watchList[i]
-    console.log(match.time)
+    // console.log(match.time)
+    var temp = watchListForCompare.find(element => element.name === match.name)
+    console.log(temp)
   }
 }
 
