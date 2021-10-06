@@ -128,6 +128,9 @@ const composeWatchList = async (matches = []) => {
   console.log(watchList.length)
   watchList = watchList.filter(element => {
     console.log(element.time)
+    if (element.name.length > 0) {
+      return true
+    }
   })
 
   console.log(watchList.length)
