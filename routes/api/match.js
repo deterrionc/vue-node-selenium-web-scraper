@@ -33,15 +33,7 @@ options.addArguments(
 
 // const htmlTable = require('./data')
 
-var watchList = [
-  {
-    name: 'Ronaldo - Messi',
-    leagueName: 'My League',
-    time: '22:00',
-    risk: 'Good',
-    select: 'first'
-  }
-]
+var watchList = []
 
 const fs = require('fs')
 const deleteMatchNameSpan = (matchName) => {
@@ -664,6 +656,9 @@ const scrapeOnMatchTimeForValidCheck = async () => {
       }
     }
   }
+
+  await driver.close()
+  await driver.quit()
 
   watchList = tempWatchListForSet
 }
