@@ -149,7 +149,7 @@ const composeWatchList = async (matches = []) => {
 const getGoodMatches = async () => {
   var matches = await getMatches()
   var goodMatches = matches.filter(match => match.risk === 'Good')
-  await composeWatchList(matches)
+  await composeWatchList(goodMatches)
 }
 
 const getMatches = async () => {
