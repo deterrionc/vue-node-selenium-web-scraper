@@ -702,7 +702,7 @@ ruleForScrape.minute = 5
 const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
   const date = new Date()
   if (date.getHours() % 2 === 0) {
-    // scrapeMatchesToday()
+    scrapeMatchesToday()
   }
 })
 
