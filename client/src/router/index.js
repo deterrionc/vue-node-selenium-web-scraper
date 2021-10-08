@@ -9,6 +9,7 @@ import Bookmakers from '../components/Bookmakers'
 import MatchDetail from '../components/MatchDetail'
 
 import MatchesToday from '../components/MatchesToday'
+import Watchlist from '../components/Watchlist'
 import Leagues from '../components/Leagues'
 
 import MatchesToday25 from '../components/Over25Tips/MatchesToday25'
@@ -47,6 +48,7 @@ export default new VueRouter({
       children: [
         { path: 'bookmakers', component: Bookmakers },
         { path: 'matchesTodayOddsPortal', component: MatchesToday },
+        { path: 'watchlist', component: Watchlist },
         { path: 'matchesToday25Tips', component: MatchesToday25 },
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },

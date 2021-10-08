@@ -55,6 +55,10 @@ const composeWatchList = async (matches = []) => {
       name: deleteMatchNameSpan(matches[i].name),
       leagueName: matches[i].leagueName,
       time: matches[i].time,
+      homeOdds: matches[i].homeOdds,
+      xOdds: matches[i].xOdds,
+      awayOdds: matches[i].awayOdds,
+      bs: matches[i].bs,
       risk: matches[i].risk,
       select: matches[i].select,
       link: matches[i].link,
@@ -373,6 +377,13 @@ const sendCustomersEmailGoodMatches = async () => {
     }
   }
 }
+
+router.get('/getWatchList', async (req, res) => {
+  res.json({
+    success: true,
+    watchlist: watchList
+  })
+})
 
 router.get('/getMatches', async (req, res) => {
   console.log('Get Matches')

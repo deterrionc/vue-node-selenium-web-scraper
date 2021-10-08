@@ -21,6 +21,12 @@
             Matches Today
           </button>
         </div>
+        <div class="row my-2">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('watchlist')"
+          v-bind:class="currentMatch === 'watchlist' ? 'btn-light' : 'btn-success'">
+            Watch List
+          </button>
+        </div>
         <hr style="color: white; height: 3px;">
         <h6 class="text-center text-white">Over/Under Strategy</h6>
         <div class="row my-2">

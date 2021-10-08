@@ -18,7 +18,8 @@ export default {
     currentMatchData: {},
     countries: [],
     matchDetail: null,
-    oddsdatas: []
+    oddsdatas: [],
+    watchlist: []
   },
   getters: {
 
@@ -56,6 +57,9 @@ export default {
     setMatchDetail(state, payload) {
       state.matchDetail = payload.match,
       state.oddsdatas = payload.oddsdatas
+    },
+    setWatchList(state, payload) {
+      state.watchlist = payload
     }
   },
   actions: {
@@ -139,6 +143,14 @@ export default {
       context.commit('setIsLoading', true)
       const res = await api.post(`/match/scrapeMatchDetail`, formData)
       if (res.data.success) {
+        context.commit('setIsLoading', false)
+      }
+    },
+    async getWatchList(context) {
+      context.commit('setIsLoading', true)
+      const res = await api.get('/match/getWatchList')
+      if (res.data.success) {
+        await context.commit('setWatchList', res.data.watchlist)
         context.commit('setIsLoading', false)
       }
     }
