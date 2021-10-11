@@ -24,8 +24,8 @@ app.use(cors())
 // Define Routes
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/auth', require('./routes/api/auth'))
-app.use('/api/match', auth, require('./routes/api/match'))
-app.use('/api/tips25', auth, require('./routes/api/tips25'))
+app.use('/api/match', require('./routes/api/match'))
+app.use('/api/tips25', require('./routes/api/tips25'))
 
 // Serve frontend built
 app.use(express.static(__dirname + '/client/dist'))
