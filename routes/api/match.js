@@ -582,6 +582,7 @@ router.get('/getMatches', async (req, res) => {
     }
 
     match.bs = oddsDatas.length
+    match.name = deleteMatchNameSpan(match.name)
     matchesForSend.push(match)
   }
 
