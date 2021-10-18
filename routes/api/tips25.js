@@ -37,16 +37,24 @@ const sendCustomersEmailGoodMatches = async () => {
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
     if (match.h1 >= 24 && match.a1 >= 24) {
-      match.risk = 'Good T1'
-    } else if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
-      match.risk = 'Great'
-    } else if (match.probability >= 85) {
-      match.risk = 'Good T2'
+      match.risk = 'Medium 1'
+    } 
+    if (match.probability >= 85) {
+      match.risk = 'Medium 2'
     }
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
+      match.risk = 'Medium 3'
+    } 
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+      match.risk = 'Good 1'
+    } 
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+      match.risk = 'Good 2'
+    } 
     matches.push(match)
   }
 
-  var matchesForEmail = matches.filter(match => match.risk === 'Good T1' || match.risk === 'Good T2' || match.risk === 'Great')
+  var matchesForEmail = matches.filter(match => match.risk === 'Good 1' || match.risk === 'Good 2' || match.risk === 'Medium 1' || match.risk === 'Medium 2' || match.risk === 'Medium 3')
 
   if (matchesForEmail.length) {
     var users = await User.find()
@@ -81,12 +89,21 @@ router.get('/getMatches', async (req, res) => {
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
     if (match.h1 >= 24 && match.a1 >= 24) {
-      match.risk = 'Good T1'
-    } else if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
-      match.risk = 'Great'
-    } else if (match.probability >= 85) {
-      match.risk = 'Good T2'
+      match.risk = 'Medium 1'
+    } 
+    if (match.probability >= 85) {
+      match.risk = 'Medium 2'
     }
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
+      match.risk = 'Medium 3'
+    } 
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+      match.risk = 'Good 1'
+    } 
+    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+      match.risk = 'Good 2'
+    } 
+    
     matches.push(match)
   }
 
