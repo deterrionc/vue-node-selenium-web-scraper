@@ -14,7 +14,7 @@ const axios = require('axios')
 const schedule = require('node-schedule')
 
 // Mongo Models
-
+const Prediction = require('../../models/Prediction')
 
 router.get('/scrapePredictionMatches', async (req, res) => {
   await scrapePredictionMatches()
@@ -24,10 +24,24 @@ router.get('/scrapePredictionMatches', async (req, res) => {
   })
 })
 
+router.get('/getPredictionMatches', async (req, res) => {
+  console.log('Get Prediction Matches')
+  
+  const predictions = await Prediction.find({ IsNew: true })
+
+  res.json({
+    success: true,
+    predictions
+  })
+})
+
 module.exports = router
 
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
+
+  await Prediction.deleteMany({ IsNew: false })
+  await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
   var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
   var startPos = htmlContent.indexOf('<div class="top-25-teams">')
@@ -44,7 +58,7 @@ const scrapePredictionMatches = async () => {
     var link = teamDetailDivs[2].slice(teamDetailDivs[2].indexOf('href=') + 6, teamDetailDivs[2].indexOf('.html') + 5)
     link = link.slice(link.indexOf('predictions/') + 12, link.indexOf('-202'))
 
-    if (link.length) {
+    if (link.length && percent > 85) {
       link = 'https://www.over25tips.com/football/prediction/' + link + '.html'
       var match = teamDetailDivs[2].slice(teamDetailDivs[2].lastIndexOf("'>") + 2, teamDetailDivs[2].lastIndexOf('</a>'))
       var teamNames = match.split(' vs ')
@@ -59,11 +73,12 @@ const scrapePredictionMatches = async () => {
       var country = countryLeague[0].trim()
       var league = countryLeague[1]
       var date = targetDivContent.slice(targetDivContent.indexOf('sp;</b>') + 7, targetDivContent.indexOf('<br><b>Day'))
-
-      var prediction = {
+      
+      var newPrediction = new Prediction({
         winningTeam, percent, link, firstTeam, secondTeam, country, league, date
-      }
-      console.log(prediction)
+      }) 
+
+      await newPrediction.save()
     }
   }
 }

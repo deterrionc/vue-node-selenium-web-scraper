@@ -3,22 +3,22 @@ import api from '../utils/api'
 export default {
   state: {
     isLoading: false,
-    matches: []
+    predictions: []
   },
   getters: {
 
   },
   mutations: {
     setPredictionMatches(state, payload) {
-      state.matches = payload
+      state.predictions = payload
     },
   },
   actions: {
     async getPredictionMatches(context) {
       context.commit('setIsLoading', true)
-      const res = await api.get('/prediction/getMatches')
+      const res = await api.get('/prediction/getPredictionMatches')
       if (res.data.success) {
-        await context.commit('setPredictionMatches', res.data.matches)
+        await context.commit('setPredictionMatches', res.data.predictions)
         context.commit('setIsLoading', false)
       }
     },
