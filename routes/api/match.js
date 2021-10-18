@@ -52,7 +52,7 @@ const composeWatchList = async (matches = []) => {
   var watchListForCompare = []
   for (var i = 0; i < matches.length; i++) {
     var match = {
-      name: deleteMatchNameSpan(matches[i].name),
+      name: matches[i].name,
       leagueName: matches[i].leagueName,
       time: matches[i].time,
       homeOdds: matches[i].homeOdds,
@@ -109,7 +109,7 @@ const composeWatchList = async (matches = []) => {
     var match = invalidMatches[matchIndex]
     var match = watchList.find(element => element.name === match.name)
     if (match.emailSent === undefined) {
-      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
     match.emailSent = true
   }
@@ -360,7 +360,7 @@ const sendCustomersEmailGoodMatches = async () => {
 
     for (var matchIndex = 0; matchIndex < watchList.length; matchIndex++) {
       var match = watchList[matchIndex]
-      emailText += (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+      emailText += (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
@@ -582,7 +582,6 @@ router.get('/getMatches', async (req, res) => {
     }
 
     match.bs = oddsDatas.length
-    // match.name = deleteMatchNameSpan(match.name)
     matchesForSend.push(match)
   }
 
@@ -649,7 +648,7 @@ const scrapeOnMatchTimeForValidCheck = async () => {
         var goodMatches = matches.filter(element => element.risk === 'Good')
         var exist = goodMatches.find(element => element._id === match._id)
         if (exist) {
-          emailText = (deleteMatchNameSpan(match.name) + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
+          emailText = (match.name + ' | ' + match.leagueName + ' | ' + match.time + '(EST GMT - 4) | ' + 'Style: Asian Handicap 0' + ' | Risk: ' + match.risk + ' | ' + 'Notes: Select "win or draw" with ' + (match.select === 'first' ? 'Home Team' : 'Away Team') + '\n\n')
           var users = await User.find()
           for (var userIndex = 0; userIndex < users.length; userIndex++) {
             var user = users[userIndex]
