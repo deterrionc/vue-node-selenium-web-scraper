@@ -35,6 +35,12 @@
             Matches Today
           </button>
         </div>
+        <div class="row my-2">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('prediction')"
+          v-bind:class="currentMatch === 'prediction' ? 'btn-light' : 'btn-success'">
+            Prediction
+          </button>
+        </div>
         <hr style="color: white; height: 3px;">
         <div class="row my-2">
           <button class="btn btn-block btn-danger" v-on:click='LOGOUT'>

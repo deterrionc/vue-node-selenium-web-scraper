@@ -13,6 +13,7 @@ import Watchlist from '../components/Watchlist'
 import Leagues from '../components/Leagues'
 
 import MatchesToday25 from '../components/Over25Tips/MatchesToday25'
+import Prediction from '../components/prediction/Prediction'
 
 import dataStore from '../store'
 
@@ -52,6 +53,7 @@ export default new VueRouter({
         { path: 'matchesToday25Tips', component: MatchesToday25 },
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },
+        { path: 'prediction', component: Prediction },
         { path: "", redirect: "/bookmakers" }
       ]
     },

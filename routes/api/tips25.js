@@ -36,19 +36,19 @@ const sendCustomersEmailGoodMatches = async () => {
 
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
-    if (match.h1 >= 24 && match.a1 >= 24) {
+    if ((match.h1 + match.a1) >= 24) {
       match.risk = 'Medium 1'
     } 
     if (match.probability >= 85) {
       match.risk = 'Medium 2'
     }
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
       match.risk = 'Medium 3'
     } 
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 1'
     } 
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 2'
     } 
     matches.push(match)
@@ -88,19 +88,19 @@ router.get('/getMatches', async (req, res) => {
 
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
-    if (match.h1 >= 24 && match.a1 >= 24) {
+    if ((match.h1 + match.a1) >= 24) {
       match.risk = 'Medium 1'
     } 
     if (match.probability >= 85) {
       match.risk = 'Medium 2'
     }
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 85) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
       match.risk = 'Medium 3'
     } 
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 1'
     } 
-    if (match.h1 >= 24 && match.a1 >= 24 && match.probability >= 90) {
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 2'
     } 
     
