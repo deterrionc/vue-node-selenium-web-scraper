@@ -39,7 +39,7 @@
                 :class='setTrRisk(match.risk)'>
                 <td>{{index + 1}}</td>
                 <td>{{match.countryName}} » {{match.leagueName}}</td>
-                <td v-html='match.name'></td>
+                <td>{{match.name}}</td>
                 <td>{{match.time}}</td>
                 <td>{{match.score}}</td>
                 <td :class='match.select === "first" ? "chooseMatch" : ""'>{{match.homeOdds}}</td>

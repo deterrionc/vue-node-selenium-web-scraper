@@ -767,7 +767,8 @@ const scrapeMatchesToday = async () => {
       htmlMatchTds.shift()
       var time = htmlMatchTds[0].slice(htmlMatchTds[0].indexOf('">') + 2, htmlMatchTds[0].indexOf('<'))
       var name = htmlMatchTds[1].slice(htmlMatchTds[1].indexOf('<a'), htmlMatchTds[1].indexOf('</td>'))
-      var name = name.slice(name.lastIndexOf('/">') + 3, name.lastIndexOf('</a>'))
+      name = name.slice(name.lastIndexOf('/">') + 3, name.lastIndexOf('</a>'))
+      name = deleteMatchNameSpan(name)
       var link = htmlMatchTds[1].slice(htmlMatchTds[1].lastIndexOf('href="/') + 6, htmlMatchTds[1].lastIndexOf('/">'))
       var link = 'https://www.oddsportal.com' + link
       if (htmlMatchTds.length > 6) {
