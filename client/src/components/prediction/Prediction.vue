@@ -32,7 +32,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for='(prediction, index) in predictions' v-bind:key="index" :class='setTrRisk(prediction.risk)'>
+              <tr v-for='(prediction, index) in predictions' v-bind:key="index"
+                :class='setTrRisk(prediction.risk1, prediction.risk2)'>
                 <td>{{index + 1}}</td>
                 <td>{{prediction.winningTeam}}</td>
                 <td>{{prediction.percent}}%</td>
@@ -66,10 +67,13 @@
     },
     methods: {
       ...mapActions(['getPredictionMatches', 'scrapePredictionMatches']),
-      setTrRisk (risk) {
-        if (risk === 'Good') return 'Good'
-        if (risk === 'Available') return 'Available'
-        if (risk === 'Exist') return 'Exist'
+      setTrRisk(risk1, risk2) {
+        console.log(risk1, risk2)
+        if (risk1 === 'Available') {
+          if (risk2 === 'Good') return 'Good'
+          return 'Available'
+        }
+        if (risk2 === 'Exist') return 'Exist'
         return ''
       }
     },
@@ -83,9 +87,11 @@
   .Available {
     background-color: #0DCAEE44;
   }
+
   .Exist {
     background-color: #7e3878;
   }
+
   .Good {
     background-color: #99b433;
   }

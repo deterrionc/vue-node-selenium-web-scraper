@@ -48,19 +48,21 @@ router.get('/getPredictionMatches', async (req, res) => {
     var intervalInDays = (prediction.date - today) / 86400000
 
     if (intervalInDays > 0 && intervalInDays < 2) {
-      prediction.risk = 'Available'
+      prediction.risk1 = 'Available'
+    } else {
+      prediction.risk1 = null
     }
 
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
 
-      if (prediction.risk === 'Available') {
+      if (prediction.risk1 === 'Available') {
         // if (matchName === match.name) {
-          prediction.risk = 'Good'
+          prediction.risk2 = 'Good'
         // }
       } else {
         // if (matchName === match.name) {
-          prediction.risk = 'Exist'
+          prediction.risk2 = 'Exist'
         // }
       }
     }
