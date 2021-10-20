@@ -122,7 +122,8 @@ const scrapePredictionMatches = async () => {
     }
   }
 
-  await getGoodPredictions()
+  var goodPredictions = await getGoodPredictions()
+  await sendCustomersEmailGoodMatches(goodPredictions)
 }
 
 const getGoodPredictions = async () => {
@@ -143,14 +144,42 @@ const getGoodPredictions = async () => {
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
 
-      if (matchName === match.name) {
+      if (prediction.risk === 'Available') {
         prediction.risk = 'Good'
         predictions.push(prediction)
       }
     }
   }
 
-  console.log(predictions)
-
   return predictions
+}
+
+const sendCustomersEmailGoodMatches = async (predictions) => {
+  var predictionsForEmail = predictions.filter(prediction => prediction.risk === 'Good')
+
+  if (predictionsForEmail.length) {
+    var users = await User.find()
+
+    var emailText = ''
+
+    for (var predictionIndex = 0; predictionIndex < predictionsForEmail.length; predictionIndex++) {
+      var prediction = predictionsForEmail[predictionIndex]
+      emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + prediction.date.slice(0, 10) + ' | ' + 'Style: Over / Under 2.5 | Risk: ' + prediction.risk + '\n\n')
+    }
+
+    console.log(emailText)
+
+    // for (var userIndex = 0; userIndex < users.length; userIndex++) {
+    //   var user = users[userIndex]
+    //   var emailContentToCustomer = {
+    //     from: 'Fyrebets <info@fyrebets.com>',
+    //     to: user.email,
+    //     subject: "Over/Under 2.5 Predictions. There are predictiones to bet.",
+    //     text: emailText
+    //   }
+    //   mailgun.messages().send(emailContentToCustomer, function (error, body) {
+    //     console.log(body)
+    //   })
+    // }
+  }
 }
