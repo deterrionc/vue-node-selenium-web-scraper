@@ -60,7 +60,6 @@ router.get('/getPredictionMatches', async (req, res) => {
     predictions.push(prediction)
   }
 
-  await getGoodPredictions()
 
   res.json({
     success: true,
@@ -121,6 +120,8 @@ const scrapePredictionMatches = async () => {
       await newPrediction.save()
     }
   }
+
+  await getGoodPredictions()
 }
 
 const getGoodPredictions = async () => {
@@ -147,8 +148,6 @@ const getGoodPredictions = async () => {
       }
     }
   }
-
-  console.log(predictions)
 
   return predictions
 }
