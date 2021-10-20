@@ -118,6 +118,7 @@ const scrapePredictionMatches = async () => {
       })
 
       await newPrediction.save()
+      console.log('One Added!')
     }
   }
 
@@ -148,6 +149,8 @@ const getGoodPredictions = async () => {
       }
     }
   }
+
+  console.log(predictions)
 
   return predictions
 }
