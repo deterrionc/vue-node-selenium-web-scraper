@@ -61,9 +61,6 @@ router.get('/getPredictionMatches', async (req, res) => {
     predictions.push(prediction)
   }
 
-  var goodPredictions = await getGoodPredictions()
-  await sendCustomersEmailGoodMatches(goodPredictions)
-
   res.json({
     success: true,
     predictions
@@ -147,7 +144,7 @@ const getGoodPredictions = async () => {
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
 
-      if (prediction.risk === 'Available') {
+      if (matchName === match.name) {
         prediction.risk = 'Good'
         predictions.push(prediction)
       }
@@ -170,19 +167,17 @@ const sendCustomersEmailGoodMatches = async (predictions) => {
       emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + prediction.date + ' | ' + 'Style: Over / Under 2.5 | Risk: ' + prediction.risk + '\n\n')
     }
 
-    console.log(emailText)
-
-    // for (var userIndex = 0; userIndex < users.length; userIndex++) {
-    //   var user = users[userIndex]
-    //   var emailContentToCustomer = {
-    //     from: 'Fyrebets <info@fyrebets.com>',
-    //     to: user.email,
-    //     subject: "Over/Under 2.5 Predictions. There are predictiones to bet.",
-    //     text: emailText
-    //   }
-    //   mailgun.messages().send(emailContentToCustomer, function (error, body) {
-    //     console.log(body)
-    //   })
-    // }
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Over/Under 2.5 Predictions. There are predictiones to bet.",
+        text: emailText
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
+    }
   }
 }
