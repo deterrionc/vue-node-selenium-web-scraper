@@ -30,16 +30,38 @@ router.get('/getPredictionMatches', async (req, res) => {
 
   const predictionsFromDB = await Prediction.find({ IsNew: true })
   const matchesFromDB = await Match.find({ IsNew: true, active: true })
+  var availablePredictions = []
+  var today = new Date()
   var predictions = []
-  var matches = []
+
+  for (var i = 0; i < predictionsFromDB.length; i++) {
+    var prediction = { ...predictionsFromDB[i]._doc }
+    var intervalInDays = (prediction.date - today) / 86400000
+    if (intervalInDays > 0 && intervalInDays < 2) {
+      availablePredictions.push(prediction)
+    }
+  }
 
   for (var i = 0; i < predictionsFromDB.length; i++) {
     var prediction = { ...predictionsFromDB[i]._doc }
     var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
+    var intervalInDays = (prediction.date - today) / 86400000
+
+    if (intervalInDays > 0 && intervalInDays < 2) {
+      prediction.risk = 'Available'
+    }
+
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
-      if (matchName === match.name) {
-        prediction.risk = 'Good'
+
+      if (prediction.risk === 'Available') {
+        // if (matchName === match.name) {
+          prediction.risk = 'Good'
+        // }
+      } else {
+        if (matchName === match.name) {
+          prediction.risk = 'Exist'
+        }
       }
     }
     predictions.push(prediction)

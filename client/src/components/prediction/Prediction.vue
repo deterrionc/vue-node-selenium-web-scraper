@@ -67,7 +67,9 @@
     methods: {
       ...mapActions(['getPredictionMatches', 'scrapePredictionMatches']),
       setTrRisk (risk) {
-        if (risk === 'Good') return 'highRisk'
+        if (risk === 'Good') return 'Good'
+        if (risk === 'Available') return 'Available'
+        if (risk === 'Exist') return 'Exist'
         return ''
       }
     },
@@ -78,10 +80,13 @@
 </script>
 
 <style scoped>
-  .select {
+  .Available {
     background-color: #0DCAEE44;
   }
-  .highRisk {
-    background-color: #146c4388;
+  .Exist {
+    background-color: #7e3878;
+  }
+  .Good {
+    background-color: #99b433;
   }
 </style>
