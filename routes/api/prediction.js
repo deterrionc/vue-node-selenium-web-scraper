@@ -31,7 +31,11 @@ router.get('/getPredictionMatches', async (req, res) => {
 
   const predictionsFromDB = await Prediction.find({ IsNew: true })
   const matchesFromDB = await Match.find({ IsNew: true, active: true })
-  var today = new Date()
+  var date = new Date()
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  var today = new Date(`${year}-${month}-${day}`)
   var predictions = []
 
   for (var i = 0; i < predictionsFromDB.length; i++) {
