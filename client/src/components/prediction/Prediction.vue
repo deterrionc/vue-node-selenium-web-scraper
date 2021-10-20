@@ -26,20 +26,20 @@
                 <th>Probability</th>
                 <th>Visit</th>
                 <th>Match</th>
-                <th>country</th>
-                <th>league</th>
-                <th>date</th>
+                <th>Country</th>
+                <th>League</th>
+                <th>Date of Fixture</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for='(prediction, index) in predictions' v-bind:key="index">
+              <tr v-for='(prediction, index) in predictions' v-bind:key="index" :class='setTrRisk(prediction.risk)'>
                 <td>{{index + 1}}</td>
                 <td>{{prediction.winningTeam}}</td>
                 <td>{{prediction.percent}}%</td>
                 <td>
                   <a target="_blank" :href='prediction.link'>Visit the Match</a>
                 </td>
-                <td>{{prediction.firstTeam}} vs {{prediction.secondTeam}}</td>
+                <td>{{prediction.firstTeam}} <span class="text-danger">vs</span> {{prediction.secondTeam}}</td>
                 <td>{{prediction.country}}</td>
                 <td>{{prediction.league}}</td>
                 <td>{{prediction.date.slice(0,10)}}</td>
@@ -66,9 +66,22 @@
     },
     methods: {
       ...mapActions(['getPredictionMatches', 'scrapePredictionMatches']),
+      setTrRisk (risk) {
+        if (risk === 'Good') return 'highRisk'
+        return ''
+      }
     },
     async created() {
       await this.getPredictionMatches()
     }
   }
 </script>
+
+<style scoped>
+  .select {
+    background-color: #0DCAEE44;
+  }
+  .highRisk {
+    background-color: #146c4388;
+  }
+</style>

@@ -15,6 +15,7 @@ const schedule = require('node-schedule')
 
 // Mongo Models
 const Prediction = require('../../models/Prediction')
+const Match = require('../../models/Match')
 
 router.get('/scrapePredictionMatches', async (req, res) => {
   await scrapePredictionMatches()
@@ -26,8 +27,23 @@ router.get('/scrapePredictionMatches', async (req, res) => {
 
 router.get('/getPredictionMatches', async (req, res) => {
   console.log('Get Prediction Matches')
-  
-  const predictions = await Prediction.find({ IsNew: true })
+
+  const predictionsFromDB = await Prediction.find({ IsNew: true })
+  const matchesFromDB = await Match.find({ IsNew: true, active: true })
+  var predictions = []
+  var matches = []
+
+  for (var i = 0; i < predictionsFromDB.length; i++) {
+    var prediction = { ...predictionsFromDB[i]._doc }
+    var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
+    for (var j = 0; j < matchesFromDB.length; j++) {
+      var match = { ...matchesFromDB[j]._doc }
+      if (matchName === match.name) {
+        prediction.risk = 'Good'
+      }
+    }
+    predictions.push(prediction)
+  } 
 
   res.json({
     success: true,
@@ -36,6 +52,13 @@ router.get('/getPredictionMatches', async (req, res) => {
 })
 
 module.exports = router
+
+const scheduleForEverydayScrape = new schedule.RecurrenceRule()
+scheduleForEverydayScrape.hour = 1
+
+const j = schedule.scheduleJob(scheduleForEverydayScrape, () => {
+  scrapePredictionMatches()
+})
 
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
@@ -73,10 +96,10 @@ const scrapePredictionMatches = async () => {
       var country = countryLeague[0].trim()
       var league = countryLeague[1]
       var date = targetDivContent.slice(targetDivContent.indexOf('sp;</b>') + 7, targetDivContent.indexOf('<br><b>Day'))
-      
+
       var newPrediction = new Prediction({
         winningTeam, percent, link, firstTeam, secondTeam, country, league, date
-      }) 
+      })
 
       await newPrediction.save()
     }
