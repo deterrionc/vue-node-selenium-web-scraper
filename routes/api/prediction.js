@@ -73,10 +73,11 @@ router.get('/getPredictionMatches', async (req, res) => {
 
 module.exports = router
 
-const scheduleForEverydayScrape = new schedule.RecurrenceRule()
-scheduleForEverydayScrape.hour = 1
+const scheduleRuleForEverydayScrape = new schedule.RecurrenceRule()
+scheduleRuleForEverydayScrape.hour = 1
+scheduleRuleForEverydayScrape.minute  = 10
 
-const j = schedule.scheduleJob(scheduleForEverydayScrape, () => {
+const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
   scrapePredictionMatches()
 })
 
