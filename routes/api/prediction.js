@@ -144,7 +144,7 @@ const getGoodPredictions = async () => {
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
 
-      if (matchName === match.name) {
+      if (prediction.risk === 'Available' && matchName === match.name) {
         prediction.risk = 'Good'
         predictions.push(prediction)
       }
