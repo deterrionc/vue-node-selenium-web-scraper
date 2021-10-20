@@ -60,6 +60,8 @@ router.get('/getPredictionMatches', async (req, res) => {
     predictions.push(prediction)
   }
 
+  var goodPredictions = await getGoodPredictions()
+  await sendCustomersEmailGoodMatches(goodPredictions)
 
   res.json({
     success: true,
