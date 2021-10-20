@@ -164,7 +164,7 @@ const sendCustomersEmailGoodMatches = async (predictions) => {
 
     for (var predictionIndex = 0; predictionIndex < predictionsForEmail.length; predictionIndex++) {
       var prediction = predictionsForEmail[predictionIndex]
-      emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + prediction.date + ' | ' + 'Style: Over / Under 2.5 | Risk: ' + prediction.risk + '\n\n')
+      emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + String(prediction.date).slice(0, 10) + ' | ' + 'Style: Over / Under 2.5 | Risk: ' + prediction.risk + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
