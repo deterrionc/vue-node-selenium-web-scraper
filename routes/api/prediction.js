@@ -39,7 +39,7 @@ router.get('/getPredictionMatches', async (req, res) => {
     var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
     var intervalInDays = (prediction.date - today) / 86400000
 
-    if (intervalInDays > 0 && intervalInDays < 2) {
+    if (intervalInDays >= 0 && intervalInDays < 2) {
       prediction.risk1 = 'Available'
     } else {
       prediction.risk1 = null
