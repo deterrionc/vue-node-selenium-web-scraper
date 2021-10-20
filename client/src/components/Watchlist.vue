@@ -19,8 +19,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for='(match, index) in matches' v-bind:key="index" v-on:click="goMatchDetail(match._id)"
-                :class='setTrRisk(match.risk)'>
+              <tr v-for='(match, index) in matches' v-bind:key="index" :class='setTrRisk(match.risk)'>
                 <td>{{index + 1}}</td>
                 <td>{{match.leagueName}}</td>
                 <td v-html='match.name'></td>
