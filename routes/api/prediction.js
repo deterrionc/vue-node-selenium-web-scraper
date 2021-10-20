@@ -55,13 +55,13 @@ router.get('/getPredictionMatches', async (req, res) => {
       var match = { ...matchesFromDB[j]._doc }
 
       if (prediction.risk === 'Available') {
-        if (matchName === match.name) {
+        // if (matchName === match.name) {
           prediction.risk = 'Good'
-        }
+        // }
       } else {
-        if (matchName === match.name) {
+        // if (matchName === match.name) {
           prediction.risk = 'Exist'
-        }
+        // }
       }
     }
     predictions.push(prediction)
