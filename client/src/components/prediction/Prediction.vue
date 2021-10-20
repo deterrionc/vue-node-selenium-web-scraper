@@ -68,13 +68,13 @@
     methods: {
       ...mapActions(['getPredictionMatches', 'scrapePredictionMatches']),
       setTrRisk(risk1, risk2) {
-        console.log(risk1, risk2)
         if (risk1 === 'Available') {
           if (risk2 === 'Good') return 'Good'
           return 'Available'
+        } else {
+          if (risk2 === 'Exist') return 'Exist'
+          return ''
         }
-        if (risk2 === 'Exist') return 'Exist'
-        return ''
       }
     },
     async created() {
