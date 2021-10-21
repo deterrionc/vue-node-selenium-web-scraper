@@ -723,9 +723,9 @@ router.get('/scrapeMatchesToday', async (req, res) => {
 const scrapeMatchesToday = async () => {
   console.log('Scrape Matches Today')
 
-  await Match.deleteMany({ IsNew: false })
+  // await Match.deleteMany({ IsNew: false })
   await Match.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
-  await OddsData.deleteMany({ IsNew: false })
+  // await OddsData.deleteMany({ IsNew: false })
   await OddsData.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
   const driver = await new webdriver.Builder()
@@ -822,7 +822,7 @@ const scrapeMatchesToday = async () => {
 async function scrapeMatchDetail(driver, link, matchID) {
   var link = link + '/#ah;2;0.00;0'
 
-  await OddsData.deleteMany({ IsNew: false, match: matchID })
+  // await OddsData.deleteMany({ IsNew: false, match: matchID })
   await OddsData.updateMany({ IsNew: true, match: matchID }, { IsNew: false }, { new: true })
 
   await driver.get(link)

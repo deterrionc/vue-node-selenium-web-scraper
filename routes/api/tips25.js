@@ -139,7 +139,7 @@ const changeTimeToEst = (time) => {
 const scrapeMatchesToday = async () => {
   console.log('scrape matches on daily over tips')
 
-  await Match25Tip.deleteMany({ IsNew: false })
+  // await Match25Tip.deleteMany({ IsNew: false })
   await Match25Tip.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
   var htmlContent = (await axios.get('https://www.over25tips.com/')).data

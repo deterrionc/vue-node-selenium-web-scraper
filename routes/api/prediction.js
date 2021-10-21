@@ -84,7 +84,7 @@ const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
 
-  await Prediction.deleteMany({ IsNew: false })
+  // await Prediction.deleteMany({ IsNew: false })
   await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
   var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
