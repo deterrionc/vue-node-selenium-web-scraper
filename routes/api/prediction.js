@@ -197,7 +197,7 @@ const sendCustomersEmailGoodMatches = async (predictions) => {
       var emailContentToCustomer = {
         from: 'Fyrebets <info@fyrebets.com>',
         to: user.email,
-        subject: "Over/Under 2.5 Predictions. There are predictiones to bet.",
+        subject: "Algo3 Over/Under 2.5 Predictions. There are predictions to bet.",
         text: emailText
       }
       mailgun.messages().send(emailContentToCustomer, function (error, body) {

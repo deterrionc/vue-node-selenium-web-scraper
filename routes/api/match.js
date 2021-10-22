@@ -655,7 +655,7 @@ const scrapeOnMatchTimeForValidCheck = async () => {
             var emailContentToCustomer = {
               from: 'Fyrebets <info@fyrebets.com>',
               to: user.email,
-              subject: "Algo1. Asian Handicap 0. Valid Match Started.",
+              subject: "Algo1 Asian Handicap 0. Valid Match Started.",
               text: emailText
             }
             mailgun.messages().send(emailContentToCustomer, function (error, body) {

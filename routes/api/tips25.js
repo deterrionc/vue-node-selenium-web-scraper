@@ -38,19 +38,19 @@ const sendCustomersEmailGoodMatches = async () => {
     var match = { ...matchesFromDB[i]._doc }
     if ((match.h1 + match.a1) >= 24) {
       match.risk = 'Medium 1'
-    } 
+    }
     if (match.probability >= 85) {
       match.risk = 'Medium 2'
     }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
       match.risk = 'Medium 3'
-    } 
+    }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 1'
-    } 
+    }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 2'
-    } 
+    }
     matches.push(match)
   }
 
@@ -90,20 +90,20 @@ router.get('/getMatches', async (req, res) => {
     var match = { ...matchesFromDB[i]._doc }
     if ((match.h1 + match.a1) >= 24) {
       match.risk = 'Medium 1'
-    } 
+    }
     if (match.probability >= 85) {
       match.risk = 'Medium 2'
     }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
       match.risk = 'Medium 3'
-    } 
+    }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 1'
-    } 
+    }
     if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
       match.risk = 'Good 2'
-    } 
-    
+    }
+
     matches.push(match)
   }
 
@@ -117,10 +117,7 @@ const rule = new schedule.RecurrenceRule()
 rule.hour = 1
 
 const j = schedule.scheduleJob(rule, () => {
-  // const date = new Date()
-  // if (date.getHours() % 2 === 0) {
-    scrapeMatchesToday()
-  // }
+  scrapeMatchesToday()
 })
 
 const changeTimeToEst = (time) => {
