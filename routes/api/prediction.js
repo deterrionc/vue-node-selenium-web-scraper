@@ -100,6 +100,12 @@ const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
 
+  const driver = await new webdriver.Builder()
+    .withCapabilities(webdriver.Capabilities.chrome())
+    .forBrowser('chrome')
+    .setChromeOptions(options)
+    .build()
+
   await driver.get('https://www.oddsportal.com/login/')
   await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
   await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
