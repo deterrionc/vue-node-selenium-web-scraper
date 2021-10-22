@@ -165,8 +165,8 @@ const scrapePredictionMatches = async () => {
           var ouTableContentText = await ouTableContent.getText()
           var textArray = ouTableContentText.split('Compare odds\n')
           var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
-          console.log('Algo3 oddLink', targetText)
-          console.log(typeof(ouTableContentText))
+          var targetValuesArray = targetText.split('\n')
+          console.log('Algo3 oddLink', targetValuesArray[3])
         }
       }
 
