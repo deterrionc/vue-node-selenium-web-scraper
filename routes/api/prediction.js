@@ -117,7 +117,7 @@ const scrapePredictionMatches = async () => {
   const matchesFromDB = await Match.find({ IsNew: true, active: true })
 
   // await Prediction.deleteMany({ IsNew: false })
-  await Prediction.updateMany({ IsNew: true }, { IsNew: false })
+  // await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
   var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
   var startPos = htmlContent.indexOf('<div class="top-25-teams">')
@@ -163,7 +163,8 @@ const scrapePredictionMatches = async () => {
           await driver.get(oddLink)
           var ouTableContent = await driver.findElement(By.id('odds-data-table'))
           var ouTableContentText = await ouTableContent.getText()
-          console.log('Algo3 oddLink', oddLink)
+          var textArrau = ouTableContentText.split('Compare odds')
+          console.log('Algo3 oddLink', textArrau)
           console.log(typeof(ouTableContentText))
         }
       }
@@ -172,7 +173,7 @@ const scrapePredictionMatches = async () => {
         winningTeam, percent, link, firstTeam, secondTeam, country, league, date
       })
 
-      await newPrediction.save()
+      // await newPrediction.save()
       console.log('Algo3. One Match Added!')
     }
   }
