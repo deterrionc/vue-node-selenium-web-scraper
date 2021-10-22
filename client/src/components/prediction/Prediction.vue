@@ -26,6 +26,7 @@
                 <th>Probability</th>
                 <th>Visit</th>
                 <th>Match</th>
+                <th>Over +2.5</th>
                 <th>Country</th>
                 <th>League</th>
                 <th>Date of Fixture</th>
@@ -41,6 +42,7 @@
                   <a target="_blank" :href='prediction.link'>Visit the Match</a>
                 </td>
                 <td>{{prediction.firstTeam}} <span class="text-danger">vs</span> {{prediction.secondTeam}}</td>
+                <td>{{prediction.handicapOver}}</td>
                 <td>{{prediction.country}}</td>
                 <td>{{prediction.league}}</td>
                 <td>{{prediction.date.slice(0,10)}}</td>

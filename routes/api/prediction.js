@@ -117,7 +117,7 @@ const scrapePredictionMatches = async () => {
   const matchesFromDB = await Match.find({ IsNew: true, active: true })
 
   // await Prediction.deleteMany({ IsNew: false })
-  // await Prediction.updateMany({ IsNew: true }, { IsNew: false })
+  await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
   var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
   var startPos = htmlContent.indexOf('<div class="top-25-teams">')
@@ -149,8 +149,8 @@ const scrapePredictionMatches = async () => {
       var country = countryLeague[0].trim()
       var league = countryLeague[1]
       var date = targetDivContent.slice(targetDivContent.indexOf('sp;</b>') + 7, targetDivContent.indexOf('<br><b>Day'))
-      
       var oddLink = '/#over-under;2'
+      var handicapOver = null
 
       var matchName = firstTeam + ' - ' + secondTeam
 
@@ -166,21 +166,21 @@ const scrapePredictionMatches = async () => {
           var textArray = ouTableContentText.split('Compare odds\n')
           var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
           var targetValuesArray = targetText.split('\n')
-          console.log('Algo3 oddLink', targetValuesArray[3])
+          handicapOver = targetValuesArray[3]
         }
       }
 
       var newPrediction = new Prediction({
-        winningTeam, percent, link, firstTeam, secondTeam, country, league, date
+        winningTeam, percent, link, firstTeam, secondTeam, country, league, date, handicapOver
       })
 
-      // await newPrediction.save()
+      await newPrediction.save()
       console.log('Algo3. One Match Added!')
     }
   }
 
   var goodPredictions = await getGoodPredictions()
-  // await sendCustomersEmailGoodMatches(goodPredictions)
+  await sendCustomersEmailGoodMatches(goodPredictions)
 
   await driver.close()
   await driver.quit()
