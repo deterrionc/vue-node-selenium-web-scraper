@@ -164,7 +164,7 @@ const scrapePredictionMatches = async () => {
           var ouTableContent = await driver.findElement(By.id('odds-data-table'))
           var ouTableContentText = await ouTableContent.getText()
           console.log('Algo3 oddLink', oddLink)
-          console.log(ouTableContentText)
+          console.log(typeof(ouTableContentText))
         }
       }
 
@@ -179,6 +179,9 @@ const scrapePredictionMatches = async () => {
 
   var goodPredictions = await getGoodPredictions()
   // await sendCustomersEmailGoodMatches(goodPredictions)
+
+  await driver.close()
+  await driver.quit()
 }
 
 const getGoodPredictions = async () => {
