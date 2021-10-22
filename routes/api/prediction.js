@@ -18,6 +18,22 @@ const Prediction = require('../../models/Prediction')
 const Match = require('../../models/Match')
 const User = require('../../models/User')
 
+// Selenium Webdriver
+const webdriver = require('selenium-webdriver')
+const chromeDriver = require('selenium-webdriver/chrome')
+const path = require('chromedriver').path
+const service = new chromeDriver.ServiceBuilder(path).build()
+chromeDriver.setDefaultService(service)
+const { By, until } = webdriver
+webdriver.promise.USE_PROMISE_MANAGER = false
+const options = new chromeDriver.Options()
+// options.setChromeBinaryPath('C:/Program Files/Google/Chrome/Application/chrome.exe')
+options.setChromeBinaryPath('/usr/bin/google-chrome')
+options.addArguments(
+  ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+  // ['--no-sandbox', '--disable-dev-shm-usage']
+)
+
 router.get('/scrapePredictionMatches', async (req, res) => {
   await scrapePredictionMatches()
 
