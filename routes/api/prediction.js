@@ -84,6 +84,14 @@ const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
 
+  await driver.get('https://www.oddsportal.com/login/')
+  await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+  await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+  await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+  await driver.get('https://www.oddsportal.com/matches/soccer/')
+  await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+  await driver.findElement(By.linkText('EU Odds')).click()
+
   const matchesFromDB = await Match.find({ IsNew: true, active: true })
 
   // await Prediction.deleteMany({ IsNew: false })
@@ -129,7 +137,12 @@ const scrapePredictionMatches = async () => {
 
         if (matchName === oddMatch.name) {
           oddLink = oddMatch.link + oddLink
+
+          await driver.get(oddLink)
+          var ouTableContent = await driver.findElement(By.id('odds-data-table'))
+          var ouTableContentText = await ouTableContent.getText()
           console.log('Algo3 oddLink', oddLink)
+          console.log(ouTableContentText)
         }
       }
 
@@ -143,7 +156,7 @@ const scrapePredictionMatches = async () => {
   }
 
   var goodPredictions = await getGoodPredictions()
-  await sendCustomersEmailGoodMatches(goodPredictions)
+  // await sendCustomersEmailGoodMatches(goodPredictions)
 }
 
 const getGoodPredictions = async () => {
