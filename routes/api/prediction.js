@@ -138,7 +138,7 @@ const scrapePredictionMatches = async () => {
       })
 
       await newPrediction.save()
-      console.log('One Added!')
+      console.log('Algo3. One Match Added!')
     }
   }
 

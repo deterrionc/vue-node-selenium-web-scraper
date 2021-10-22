@@ -881,7 +881,7 @@ async function scrapeMatchDetail(driver, link, matchID) {
         IsNew: true
       })
       await newOddsData.save()
-      console.log('ONE ADDED')
+      console.log('Algo1. ONE MATCH ADDED')
     }
   } catch (err) {
     console.log(err)

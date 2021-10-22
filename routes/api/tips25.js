@@ -166,6 +166,7 @@ const scrapeMatchesToday = async () => {
       time, league, homeTeam, awayTeam, h1, h2, a1, a2, a3, a4, probability
     })
     await newMatch.save()
+    console.log('Algo2. One Match Added!')
   }
 
   await sendCustomersEmailGoodMatches()
