@@ -10,7 +10,13 @@ const PredictionSchema = new Schema({
   }, 
   link: {
     type: String
-  }, 
+  },
+  oddLink: {
+    type: String
+  },
+  handicapOver: {
+    type: Number
+  },
   firstTeam: {
     type: String
   }, 

@@ -75,7 +75,7 @@ module.exports = router
 
 const scheduleRuleForEverydayScrape = new schedule.RecurrenceRule()
 scheduleRuleForEverydayScrape.hour = 1
-scheduleRuleForEverydayScrape.minute  = 10
+scheduleRuleForEverydayScrape.minute = 10
 
 const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
   scrapePredictionMatches()
@@ -83,6 +83,8 @@ const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
 
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
+
+  const matchesFromDB = await Match.find({ IsNew: true, active: true })
 
   // await Prediction.deleteMany({ IsNew: false })
   await Prediction.updateMany({ IsNew: true }, { IsNew: false })
@@ -117,6 +119,19 @@ const scrapePredictionMatches = async () => {
       var country = countryLeague[0].trim()
       var league = countryLeague[1]
       var date = targetDivContent.slice(targetDivContent.indexOf('sp;</b>') + 7, targetDivContent.indexOf('<br><b>Day'))
+      
+      var oddLink = '/#over-under;2'
+
+      var matchName = firstTeam + ' - ' + secondTeam
+
+      for (var j = 0; j < matchesFromDB.length; j++) {
+        var oddMatch = { ...matchesFromDB[j]._doc }
+
+        if (matchName === oddMatch.name) {
+          oddLink = oddMatch.link + oddLink
+          console.log('Algo3 oddLink', oddLink)
+        }
+      }
 
       var newPrediction = new Prediction({
         winningTeam, percent, link, firstTeam, secondTeam, country, league, date
@@ -154,6 +169,7 @@ const getGoodPredictions = async () => {
       var match = { ...matchesFromDB[j]._doc }
 
       if (prediction.risk === 'Available' && matchName === match.name) {
+        // if (matchName === match.name) {
         prediction.risk = 'Good'
         predictions.push(prediction)
       }

@@ -122,7 +122,7 @@ const composeWatchList = async (matches = []) => {
       var emailContentToCustomer = {
         from: 'Fyrebets <info@fyrebets.com>',
         to: user.email,
-        subject: "Some Matches changed to Invalid.",
+        subject: "Algo1 Asian Handicap 0. Some Matches changed to Invalid.",
         text: (emailText + 'These matches are still in watch list.')
       }
       mailgun.messages().send(emailContentToCustomer, function (error, body) {
@@ -368,7 +368,7 @@ const sendCustomersEmailGoodMatches = async () => {
       var emailContentToCustomer = {
         from: 'Fyrebets <info@fyrebets.com>',
         to: user.email,
-        subject: "Don't miss the change. There are matches to bet.",
+        subject: "Algo1 Asian Handicap 0. There are matches to bet.",
         text: emailText
       }
       mailgun.messages().send(emailContentToCustomer, function (error, body) {
@@ -655,7 +655,7 @@ const scrapeOnMatchTimeForValidCheck = async () => {
             var emailContentToCustomer = {
               from: 'Fyrebets <info@fyrebets.com>',
               to: user.email,
-              subject: "Valid Match Started.",
+              subject: "Algo1. Asian Handicap 0. Valid Match Started.",
               text: emailText
             }
             mailgun.messages().send(emailContentToCustomer, function (error, body) {
