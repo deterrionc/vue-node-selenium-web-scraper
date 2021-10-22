@@ -163,8 +163,9 @@ const scrapePredictionMatches = async () => {
           await driver.get(oddLink)
           var ouTableContent = await driver.findElement(By.id('odds-data-table'))
           var ouTableContentText = await ouTableContent.getText()
-          var textArrau = ouTableContentText.split('Compare odds\n')
-          console.log('Algo3 oddLink', textArrau)
+          var textArray = ouTableContentText.split('Compare odds\n')
+          var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
+          console.log('Algo3 oddLink', targetText)
           console.log(typeof(ouTableContentText))
         }
       }
