@@ -115,6 +115,7 @@ router.get('/getMatches', async (req, res) => {
 
 const rule = new schedule.RecurrenceRule()
 rule.hour = 1
+rule.minute = 45
 
 const j = schedule.scheduleJob(rule, () => {
   scrapeMatchesToday()
