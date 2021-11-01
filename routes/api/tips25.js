@@ -81,6 +81,77 @@ const sendCustomersEmailGoodMatches = async () => {
   }
 }
 
+const sendCustomersEmailGoodMatches4 = async () => {
+  var matchesFromDB = await Match25Tip.find({ IsNew: true })
+  var matches = []
+
+  for (var i = 0; i < matchesFromDB.length; i++) {
+    var match = { ...matchesFromDB[i]._doc }
+    if ((match.h1 + match.a1) >= 24) {
+      match.risk = 'Good T1'
+    }
+    if (match.probability >= 85) {
+      match.risk = 'Good T2'
+    }
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
+      match.risk = 'Great'
+    }
+    matches.push(match)
+  }
+
+  var matchesForEmail = matches.filter(match => match.risk === 'Good T1' || match.risk === 'Good T2' || match.risk === 'Great')
+
+  if (matchesForEmail.length) {
+    var users = await User.find()
+
+    var emailText = ''
+
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
+      emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
+    }
+
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Algo4 Over/Under Strategy. There are matches to bet.",
+        text: emailText
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
+    }
+  }
+}
+
+router.get('/getMatches4', async (req, res) => {
+  console.log('GET MATCHES TIPS 25 ALGO 4')
+  var matchesFromDB = await Match25Tip.find({ IsNew: true })
+  var matches = []
+
+  for (var i = 0; i < matchesFromDB.length; i++) {
+    var match = { ...matchesFromDB[i]._doc }
+    if ((match.h1 + match.a1) >= 24) {
+      match.risk = 'Good T1'
+    }
+    if (match.probability >= 85) {
+      match.risk = 'Good T2'
+    }
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
+      match.risk = 'Great'
+    }
+
+    matches.push(match)
+  }
+
+  res.json({
+    success: true,
+    matches
+  })
+})
+
 router.get('/getMatches', async (req, res) => {
   console.log('GET MATCHES TIPS 25')
   var matchesFromDB = await Match25Tip.find({ IsNew: true })
@@ -171,6 +242,7 @@ const scrapeMatchesToday = async () => {
   }
 
   await sendCustomersEmailGoodMatches()
+  await sendCustomersEmailGoodMatches4()
 }
 
 router.get('/scrapeMatchesToday', async (req, res) => {

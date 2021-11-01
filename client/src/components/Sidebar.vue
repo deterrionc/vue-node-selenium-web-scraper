@@ -18,13 +18,13 @@
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesTodayOddsPortal')"
           v-bind:class="currentMatch === 'matchesTodayOddsPortal' ? 'btn-light' : 'btn-success'">
-            Matches Today
+            Matches Today(1)
           </button>
         </div>
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('watchlist')"
           v-bind:class="currentMatch === 'watchlist' ? 'btn-light' : 'btn-success'">
-            Watch List
+            Watch List(1)
           </button>
         </div>
         <hr style="color: white; height: 3px;">
@@ -32,13 +32,19 @@
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesToday25Tips')"
           v-bind:class="currentMatch === 'matchesToday25Tips' ? 'btn-light' : 'btn-success'">
-            Matches Today
+            Matches Today(2)
+          </button>
+        </div>
+        <div class="row my-2">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesToday25Tips4')"
+          v-bind:class="currentMatch === 'matchesToday25Tips4' ? 'btn-light' : 'btn-success'">
+            Matches Today(4)
           </button>
         </div>
         <div class="row my-2">
           <button class="btn btn-block" v-on:click="SetCurrentMatch('prediction')"
           v-bind:class="currentMatch === 'prediction' ? 'btn-light' : 'btn-success'">
-            Prediction
+            Prediction(3)
           </button>
         </div>
         <hr style="color: white; height: 3px;">

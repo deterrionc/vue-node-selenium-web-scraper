@@ -13,6 +13,7 @@ import Watchlist from '../components/Watchlist'
 import Leagues from '../components/Leagues'
 
 import MatchesToday25 from '../components/Over25Tips/MatchesToday25'
+import MatchesToday25_4 from '../components/Over25Tips/MatchesToday25-4'
 import Prediction from '../components/prediction/Prediction'
 
 import dataStore from '../store'
@@ -51,6 +52,7 @@ export default new VueRouter({
         { path: 'matchesTodayOddsPortal', component: MatchesToday },
         { path: 'watchlist', component: Watchlist },
         { path: 'matchesToday25Tips', component: MatchesToday25 },
+        { path: 'matchesToday25Tips4', component: MatchesToday25_4 },
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },
         { path: 'prediction', component: Prediction },
