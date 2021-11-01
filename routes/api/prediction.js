@@ -66,7 +66,6 @@ router.get('/getPredictionMatches', async (req, res) => {
 
   for (var i = 0; i < predictionsFromDB.length; i++) {
     var prediction = { ...predictionsFromDB[i]._doc }
-    // var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
     var pFirstTeam = remove_FK_FC_SC(prediction.firstTeam)
     var pSecondTeam = remove_FK_FC_SC(prediction.secondTeam)
     var intervalInDays = (prediction.date - today) / 86400000
@@ -114,14 +113,6 @@ const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
     scrapePredictionMatches()
   }
 })
-
-// const scheduleRuleForEverydayScrape = new schedule.RecurrenceRule()
-// scheduleRuleForEverydayScrape.hour = 1
-// scheduleRuleForEverydayScrape.minute = 10
-
-// const j = schedule.scheduleJob(scheduleRuleForEverydayScrape, () => {
-//   scrapePredictionMatches()
-// })
 
 const scrapePredictionMatches = async () => {
   console.log('Scrape Prediction Matches')
@@ -224,29 +215,40 @@ const getGoodPredictions = async () => {
 
   for (var i = 0; i < predictionsFromDB.length; i++) {
     var prediction = { ...predictionsFromDB[i]._doc }
-    var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
+    var pFirstTeam = remove_FK_FC_SC(prediction.firstTeam)
+    var pSecondTeam = remove_FK_FC_SC(prediction.secondTeam)
     var intervalInDays = (prediction.date - today) / 86400000
 
     if (intervalInDays >= 0 && intervalInDays < 2) {
-      prediction.risk = 'Available'
+      prediction.risk1 = 'Available'
+    } else {
+      prediction.risk1 = null
     }
 
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
+      var teamNames = match.name.split(' - ')
+      var mFirstTeam = remove_FK_FC_SC(teamNames[0])
+      var mSecondTeam = remove_FK_FC_SC(teamNames[1])
 
-      if (prediction.risk === 'Available' && matchName === match.name) {
-        // if (matchName === match.name) {
-        prediction.risk = 'Good'
-        predictions.push(prediction)
+      if (prediction.risk1 === 'Available') {
+        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
+          prediction.risk2 = 'Good'
+        }
+      } else {
+        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
+          prediction.risk2 = 'Exist'
+        }
       }
     }
+    predictions.push(prediction)
   }
 
   return predictions
 }
 
 const sendCustomersEmailGoodMatches = async (predictions) => {
-  var predictionsForEmail = predictions.filter(prediction => prediction.risk === 'Good')
+  var predictionsForEmail = predictions.filter(prediction => prediction.risk2 === 'Good' || prediction.risk2 === 'Exist')
 
   if (predictionsForEmail.length) {
     var users = await User.find()
@@ -255,7 +257,7 @@ const sendCustomersEmailGoodMatches = async (predictions) => {
 
     for (var predictionIndex = 0; predictionIndex < predictionsForEmail.length; predictionIndex++) {
       var prediction = predictionsForEmail[predictionIndex]
-      emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + String(prediction.date).slice(0, 10) + ' | ' + 'Style: Over / Under 2.5 | Risk: ' + prediction.risk + '\n\n')
+      emailText += (prediction.firstTeam + ' - ' + prediction.secondTeam + ' | ' + prediction.league + ' | ' + String(prediction.date).slice(0, 10) + ' | Style: Over / Under 2.5 | Risk: ' + prediction.risk2 + ' | Color: ' + (prediction.risk2 === 'Good' ? 'Green' : 'Purple') + '\n\n')
     }
 
     for (var userIndex = 0; userIndex < users.length; userIndex++) {
