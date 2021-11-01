@@ -42,6 +42,16 @@ router.get('/scrapePredictionMatches', async (req, res) => {
   })
 })
 
+const remove_FK_FC_SC = (teamName) => {
+  var name = teamName.replace(' FK', '')
+  name = teamName.replace('FK ', '')
+  name = teamName.replace(' FC', '')
+  name = teamName.replace('FC ', '')
+  name = teamName.replace(' SC', '')
+  name = teamName.replace('SC ', '')
+  return name
+}
+
 router.get('/getPredictionMatches', async (req, res) => {
   console.log('Get Prediction Matches')
 
@@ -56,7 +66,9 @@ router.get('/getPredictionMatches', async (req, res) => {
 
   for (var i = 0; i < predictionsFromDB.length; i++) {
     var prediction = { ...predictionsFromDB[i]._doc }
-    var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
+    // var matchName = prediction.firstTeam + ' - ' + prediction.secondTeam
+    var pFirstTeam = remove_FK_FC_SC(prediction.firstTeam)
+    var pSecondTeam = remove_FK_FC_SC(prediction.secondTeam)
     var intervalInDays = (prediction.date - today) / 86400000
 
     if (intervalInDays >= 0 && intervalInDays < 2) {
@@ -67,13 +79,17 @@ router.get('/getPredictionMatches', async (req, res) => {
 
     for (var j = 0; j < matchesFromDB.length; j++) {
       var match = { ...matchesFromDB[j]._doc }
+      // var mFirstTeam = match.name.
+      var teamNames = match.name.split(' - ')
+      var mFirstTeam = remove_FK_FC_SC(teamNames[0])
+      var mSecondTeam = remove_FK_FC_SC(teamNames[1])
 
       if (prediction.risk1 === 'Available') {
-        if (matchName === match.name) {
+        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
           prediction.risk2 = 'Good'
         }
       } else {
-        if (matchName === match.name) {
+        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
           prediction.risk2 = 'Exist'
         }
       }
