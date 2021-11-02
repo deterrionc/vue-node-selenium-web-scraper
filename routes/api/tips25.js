@@ -133,7 +133,7 @@ router.get('/getMatches4', async (req, res) => {
 
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
-    if ((match.h1 + match.a1) >= 24) {
+    if (match.a1 >= 24 && match.h1 >= 24) {
       match.risk = 'Good T1'
     }
     if (match.probability >= 85) {
