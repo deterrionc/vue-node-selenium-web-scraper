@@ -27,11 +27,9 @@ chromeDriver.setDefaultService(service)
 const { By, until } = webdriver
 webdriver.promise.USE_PROMISE_MANAGER = false
 const options = new chromeDriver.Options()
-// options.setChromeBinaryPath('C:/Program Files/Google/Chrome/Application/chrome.exe')
-options.setChromeBinaryPath('/usr/bin/google-chrome')
+options.setChromeBinaryPath(config.get('selenium.chromeBinaryPath'))
 options.addArguments(
-  ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
-  // ['--no-sandbox', '--disable-dev-shm-usage']
+  config.get('selenium.arguments')
 )
 
 router.get('/scrapePredictionMatches', async (req, res) => {
@@ -105,7 +103,7 @@ router.get('/getPredictionMatches', async (req, res) => {
 module.exports = router
 
 const ruleForScrape = new schedule.RecurrenceRule()
-ruleForScrape.minute = 10
+ruleForScrape.minute = 15
 
 const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
   const date = new Date()

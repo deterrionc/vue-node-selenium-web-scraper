@@ -21,11 +21,9 @@ chromeDriver.setDefaultService(service)
 const { By, until } = webdriver
 webdriver.promise.USE_PROMISE_MANAGER = false
 const options = new chromeDriver.Options()
-options.setChromeBinaryPath('C:/Program Files/Google/Chrome/Application/chrome.exe')
-// options.setChromeBinaryPath('/usr/bin/google-chrome')
+options.setChromeBinaryPath(config.get('selenium.chromeBinaryPath'))
 options.addArguments(
-  // ['--no-sandbox', '--disable-dev-shm-usage']
-  ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+  config.get('selenium.arguments')
 )
 
 const htmlContent = require('./data')

@@ -2,9 +2,9 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 
 import Home from '../components/home/index'
-import Auth from '../components/Auth'
-import Login from '../components/Auth/Login'
-import Register from '../components/Auth/Register'
+import Auth from '../components/auth'
+import Login from '../components/auth/Login'
+import Register from '../components/auth/Register'
 import Bookmakers from '../components/Bookmakers'
 import MatchDetail from '../components/MatchDetail'
 
@@ -15,6 +15,7 @@ import Leagues from '../components/Leagues'
 import MatchesToday25 from '../components/Over25Tips/MatchesToday25'
 import MatchesToday25_4 from '../components/Over25Tips/MatchesToday25-4'
 import Prediction from '../components/prediction/Prediction'
+import Algo5Matches from '../components/algo5/Matches'
 
 import dataStore from '../store'
 
@@ -56,6 +57,7 @@ export default new VueRouter({
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },
         { path: 'prediction', component: Prediction },
+        { path: 'algo5', component: Algo5Matches },
         { path: "", redirect: "/bookmakers" }
       ]
     },
