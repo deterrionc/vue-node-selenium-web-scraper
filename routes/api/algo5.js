@@ -31,7 +31,7 @@ router.get('/scrapeMatches', async (req, res) => {
     .setChromeOptions(options)
     .build()
 
-  await driver.get('https://1xbet.whoscored.com/Betting/Facts')
+  await driver.get('https://www.whoscored.com/Betting/Facts')
   await driver.findElement(By.className('filter-drop')).click()
   await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
 
