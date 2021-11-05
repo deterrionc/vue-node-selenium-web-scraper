@@ -32,12 +32,14 @@ router.get('/scrapeMatches', async (req, res) => {
     .build()
 
   await driver.get('https://1xbet.whoscored.com/Betting/Facts')
+  // await driver.sleep(10000)
+
   await driver.findElement(By.xpath('//div[@id="facts-filter-matchMarket"]/select[@class="filter-drop"]')).click()
   await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
 
-  var tableMatches = await driver.findElement(By.tag('matchFacts'))
-  var tableContent = await tableMatches.getAttribute('innerHTML')
-  console.log(tableContent)
+  // var tableMatches = await driver.findElement(By.xpath('//body'))
+  // var tableContent = await tableMatches.getAttribute('innerHTML')
+  // console.log(tableContent)
 
   await driver.close()
   await driver.quit()
