@@ -30,20 +30,20 @@
         <hr style="color: white; height: 3px;">
         <h6 class="text-center text-white">Over/Under Strategy</h6>
         <div class="row my-2">
-          <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesToday25Tips')"
-          v-bind:class="currentMatch === 'matchesToday25Tips' ? 'btn-light' : 'btn-success'">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('algo2')"
+          v-bind:class="currentMatch === 'algo2' ? 'btn-light' : 'btn-success'">
             Algo 2 Matches
           </button>
         </div>
         <div class="row my-2">
-          <button class="btn btn-block" v-on:click="SetCurrentMatch('prediction')"
-          v-bind:class="currentMatch === 'prediction' ? 'btn-light' : 'btn-success'">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('algo3')"
+          v-bind:class="currentMatch === 'algo3' ? 'btn-light' : 'btn-success'">
             Algo 3 Matches
           </button>
         </div>
         <div class="row my-2">
-          <button class="btn btn-block" v-on:click="SetCurrentMatch('matchesToday25Tips4')"
-          v-bind:class="currentMatch === 'matchesToday25Tips4' ? 'btn-light' : 'btn-success'">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('algo4')"
+          v-bind:class="currentMatch === 'algo4' ? 'btn-light' : 'btn-success'">
             Algo 4 Matches
           </button>
         </div>

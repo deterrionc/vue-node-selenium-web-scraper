@@ -719,100 +719,103 @@ router.get('/scrapeMatchesToday', async (req, res) => {
 const scrapeMatchesToday = async () => {
   console.log('Scrape Matches Today')
 
-  // await Match.deleteMany({ IsNew: false })
-  await Match.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
-  // await OddsData.deleteMany({ IsNew: false })
-  await OddsData.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
+  try {
+    await Match.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
+    await OddsData.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
-  const driver = await new webdriver.Builder()
-    .withCapabilities(webdriver.Capabilities.chrome())
-    .forBrowser('chrome')
-    .setChromeOptions(options)
-    .build()
+    const driver = await new webdriver.Builder()
+      .withCapabilities(webdriver.Capabilities.chrome())
+      .forBrowser('chrome')
+      .setChromeOptions(options)
+      .build()
 
-  await driver.get('https://www.oddsportal.com/login/')
-  await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
-  await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
-  await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+    await driver.get('https://www.oddsportal.com/login/')
+    await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+    await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+    await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
 
-  await driver.get('https://www.oddsportal.com/matches/soccer/')
-  await driver.findElement(By.id('user-header-oddsformat-expander')).click()
-  await driver.findElement(By.linkText('EU Odds')).click()
+    await driver.get('https://www.oddsportal.com/matches/soccer/')
+    await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+    await driver.findElement(By.linkText('EU Odds')).click()
 
-  var tableMatches = await driver.findElement(By.id('table-matches'))
-  var tableContent = await tableMatches.getAttribute('innerHTML')
+    var tableMatches = await driver.findElement(By.id('table-matches'))
+    var tableContent = await tableMatches.getAttribute('innerHTML')
 
-  var htmlTableTrs = tableContent.split('<tbody>').pop()
-  htmlTableTrs = htmlTableTrs.slice(0, htmlTableTrs.indexOf('</tbody>'))
-  htmlTableTrs = htmlTableTrs.split('xtid')
-  htmlTableTrs.shift()
+    var htmlTableTrs = tableContent.split('<tbody>').pop()
+    htmlTableTrs = htmlTableTrs.slice(0, htmlTableTrs.indexOf('</tbody>'))
+    htmlTableTrs = htmlTableTrs.split('xtid')
+    htmlTableTrs.shift()
 
-  for (var i = 0; i < htmlTableTrs.length; i++) {
-    var htmlTableTr = htmlTableTrs[i]
-    var countryName = htmlTableTr.slice(htmlTableTr.indexOf('&nbsp;</span>') + 13, htmlTableTr.indexOf('</a><span '))
-    var leagueName = htmlTableTr.slice(htmlTableTr.indexOf('</span><a') + 13, htmlTableTr.indexOf('</a></th>'))
-    var leagueName = leagueName.split('/">').pop()
+    for (var i = 0; i < htmlTableTrs.length; i++) {
+      var htmlTableTr = htmlTableTrs[i]
+      var countryName = htmlTableTr.slice(htmlTableTr.indexOf('&nbsp;</span>') + 13, htmlTableTr.indexOf('</a><span '))
+      var leagueName = htmlTableTr.slice(htmlTableTr.indexOf('</span><a') + 13, htmlTableTr.indexOf('</a></th>'))
+      var leagueName = leagueName.split('/">').pop()
 
-    var htmlMatchTrs = htmlTableTr.split('xeid')
-    htmlMatchTrs.shift()
+      var htmlMatchTrs = htmlTableTr.split('xeid')
+      htmlMatchTrs.shift()
 
-    for (var j = 0; j < htmlMatchTrs.length; j++) {
-      var htmlMatchTr = htmlMatchTrs[j]
-      var htmlMatchTds = htmlMatchTr.split('<td')
-      htmlMatchTds.shift()
-      var time = htmlMatchTds[0].slice(htmlMatchTds[0].indexOf('">') + 2, htmlMatchTds[0].indexOf('<'))
-      var name = htmlMatchTds[1].slice(htmlMatchTds[1].indexOf('<a'), htmlMatchTds[1].indexOf('</td>'))
-      name = name.slice(name.lastIndexOf('/">') + 3, name.lastIndexOf('</a>'))
-      name = deleteMatchNameSpan(name)
-      var link = htmlMatchTds[1].slice(htmlMatchTds[1].lastIndexOf('href="/') + 6, htmlMatchTds[1].lastIndexOf('/">'))
-      var link = 'https://www.oddsportal.com' + link
-      if (htmlMatchTds.length > 6) {
-        var score = htmlMatchTds[2].slice(htmlMatchTds[2].lastIndexOf('">') + 2, htmlMatchTds[2].indexOf('</'))
-        var homeOdds = htmlMatchTds[3].slice(htmlMatchTds[3].indexOf('odds_text">') + 11, htmlMatchTds[3].indexOf('</a>'))
-        var xOdds = htmlMatchTds[4].slice(htmlMatchTds[4].indexOf('odds_text">') + 11, htmlMatchTds[4].indexOf('</a>'))
-        var awayOdds = htmlMatchTds[5].slice(htmlMatchTds[5].indexOf('odds_text">') + 11, htmlMatchTds[5].indexOf('</a>'))
-        var bs = htmlMatchTds[6].slice(htmlMatchTds[6].indexOf('">') + 2, htmlMatchTds[6].indexOf('</td>'))
+      for (var j = 0; j < htmlMatchTrs.length; j++) {
+        var htmlMatchTr = htmlMatchTrs[j]
+        var htmlMatchTds = htmlMatchTr.split('<td')
+        htmlMatchTds.shift()
+        var time = htmlMatchTds[0].slice(htmlMatchTds[0].indexOf('">') + 2, htmlMatchTds[0].indexOf('<'))
+        var name = htmlMatchTds[1].slice(htmlMatchTds[1].indexOf('<a'), htmlMatchTds[1].indexOf('</td>'))
+        name = name.slice(name.lastIndexOf('/">') + 3, name.lastIndexOf('</a>'))
+        name = deleteMatchNameSpan(name)
+        var link = htmlMatchTds[1].slice(htmlMatchTds[1].lastIndexOf('href="/') + 6, htmlMatchTds[1].lastIndexOf('/">'))
+        var link = 'https://www.oddsportal.com' + link
+        if (htmlMatchTds.length > 6) {
+          var score = htmlMatchTds[2].slice(htmlMatchTds[2].lastIndexOf('">') + 2, htmlMatchTds[2].indexOf('</'))
+          var homeOdds = htmlMatchTds[3].slice(htmlMatchTds[3].indexOf('odds_text">') + 11, htmlMatchTds[3].indexOf('</a>'))
+          var xOdds = htmlMatchTds[4].slice(htmlMatchTds[4].indexOf('odds_text">') + 11, htmlMatchTds[4].indexOf('</a>'))
+          var awayOdds = htmlMatchTds[5].slice(htmlMatchTds[5].indexOf('odds_text">') + 11, htmlMatchTds[5].indexOf('</a>'))
+          var bs = htmlMatchTds[6].slice(htmlMatchTds[6].indexOf('">') + 2, htmlMatchTds[6].indexOf('</td>'))
 
-        var newMatch = new Match({ name, link, countryName, leagueName, score, time, homeOdds, xOdds, awayOdds, bs })
+          var newMatch = new Match({ name, link, countryName, leagueName, score, time, homeOdds, xOdds, awayOdds, bs })
 
-        var league = await League.findOne({ leagueName, countryName })
+          var league = await League.findOne({ leagueName, countryName })
 
-        if (league) {
-          if (league.active) {
-            newMatch.active = true
-            await scrapeMatchDetail(driver, link, newMatch._id)
-            console.log('Active Match Found')
+          if (league) {
+            if (league.active) {
+              newMatch.active = true
+              await scrapeMatchDetail(driver, link, newMatch._id)
+              console.log('Active Match Found')
+            }
           }
-        }
 
-        await newMatch.save()
-      } else {
-        var homeOdds = htmlMatchTds[2].slice(htmlMatchTds[2].indexOf('odds_text">') + 11, htmlMatchTds[2].indexOf('</a>'))
-        var xOdds = htmlMatchTds[3].slice(htmlMatchTds[3].indexOf('odds_text">') + 11, htmlMatchTds[3].indexOf('</a>'))
-        var awayOdds = htmlMatchTds[4].slice(htmlMatchTds[4].indexOf('odds_text">') + 11, htmlMatchTds[4].indexOf('</a>'))
-        var bs = htmlMatchTds[5].slice(htmlMatchTds[5].indexOf('">') + 2, htmlMatchTds[5].indexOf('</td>'))
+          await newMatch.save()
+        } else {
+          var homeOdds = htmlMatchTds[2].slice(htmlMatchTds[2].indexOf('odds_text">') + 11, htmlMatchTds[2].indexOf('</a>'))
+          var xOdds = htmlMatchTds[3].slice(htmlMatchTds[3].indexOf('odds_text">') + 11, htmlMatchTds[3].indexOf('</a>'))
+          var awayOdds = htmlMatchTds[4].slice(htmlMatchTds[4].indexOf('odds_text">') + 11, htmlMatchTds[4].indexOf('</a>'))
+          var bs = htmlMatchTds[5].slice(htmlMatchTds[5].indexOf('">') + 2, htmlMatchTds[5].indexOf('</td>'))
 
-        var newMatch = new Match({ name, link, countryName, leagueName, time, homeOdds, xOdds, awayOdds, bs })
+          var newMatch = new Match({ name, link, countryName, leagueName, time, homeOdds, xOdds, awayOdds, bs })
 
-        var league = await League.findOne({ leagueName, countryName })
+          var league = await League.findOne({ leagueName, countryName })
 
-        if (league) {
-          if (league.active) {
-            newMatch.active = true
-            await scrapeMatchDetail(driver, link, newMatch._id)
-            console.log('Active Match Found')
+          if (league) {
+            if (league.active) {
+              newMatch.active = true
+              await scrapeMatchDetail(driver, link, newMatch._id)
+              console.log('Active Match Found')
+            }
           }
-        }
 
-        await newMatch.save()
+          await newMatch.save()
+        }
       }
     }
+
+    await driver.close()
+    await driver.quit()
+
+    await sendCustomersEmailGoodMatches()
+  } catch (error) {
+    console.log('------------- SOMETHING WENT WRONG ON ALGO 1 --------------')
+    console.log(error)
   }
-
-  await driver.close()
-  await driver.quit()
-
-  await sendCustomersEmailGoodMatches()
 }
 
 async function scrapeMatchDetail(driver, link, matchID) {

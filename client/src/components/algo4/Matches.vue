@@ -5,8 +5,8 @@
         <div style="float:right">
           <br />
           <div style="float:right">
-            <button class="btn btn-secondary" v-on:click='scrapeMatchesTodayTips25()'>
-              Scrape Matches Today Tips 25
+            <button class="btn btn-secondary" v-on:click='scrapeMatches()'>
+              Scrape Algo 4 Matches
             </button>
           </div>
           <br />
@@ -67,19 +67,22 @@
     computed: {
       ...mapState({
         isLoading: state => state.match.isLoading,
-        matches: state => state.tips25.matches
+        matches: state => state.algo4.matches
       })
     },
     methods: {
-      ...mapActions(['scrapeMatchesTodayTips25', 'getMatchesTodayTips25']),
+      ...mapActions({
+        getMatches: 'algo4/getMatches',
+        scrapeMatches: 'algo4/scrapeMatches'
+      }),
       setTrRisk (risk) {
-        if (risk === 'Medium 1' || risk === 'Medium 2' || risk === 'Medium 3') return 'select'
-        if (risk === 'Good 1' || risk === 'Good 2') return 'highRisk'
+        if (risk === 'Good T1' || risk === 'Good T2') return 'select'
+        if (risk === 'Great') return 'highRisk'
         return ''
       }
     },
     async created() {
-      await this.getMatchesTodayTips25()
+      await this.getMatches()
     }
   }
 </script>

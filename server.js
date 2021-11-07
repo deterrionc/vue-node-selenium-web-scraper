@@ -25,8 +25,9 @@ app.use(cors())
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/match', require('./routes/api/match'))
-app.use('/api/tips25', require('./routes/api/tips25'))
-app.use('/api/prediction', require('./routes/api/prediction'))
+app.use('/api/algo2', require('./routes/api/algo2'))
+app.use('/api/algo3', require('./routes/api/algo3'))
+app.use('/api/algo4', require('./routes/api/algo4'))
 app.use('/api/algo5', require('./routes/api/algo5'))
 
 // Serve frontend built

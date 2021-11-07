@@ -12,9 +12,10 @@ import MatchesToday from '../components/MatchesToday'
 import Watchlist from '../components/Watchlist'
 import Leagues from '../components/Leagues'
 
-import MatchesToday25 from '../components/Over25Tips/MatchesToday25'
-import MatchesToday25_4 from '../components/Over25Tips/MatchesToday25-4'
 import Prediction from '../components/prediction/Prediction'
+import Algo2Matches from '../components/algo2/Matches'
+import Algo3Matches from '../components/algo3/Matches'
+import Algo4Matches from '../components/algo4/Matches'
 import Algo5Matches from '../components/algo5/Matches'
 
 import dataStore from '../store'
@@ -52,11 +53,12 @@ export default new VueRouter({
         { path: 'bookmakers', component: Bookmakers },
         { path: 'matchesTodayOddsPortal', component: MatchesToday },
         { path: 'watchlist', component: Watchlist },
-        { path: 'matchesToday25Tips', component: MatchesToday25 },
-        { path: 'matchesToday25Tips4', component: MatchesToday25_4 },
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },
         { path: 'prediction', component: Prediction },
+        { path: 'algo2', component: Algo2Matches },
+        { path: 'algo3', component: Algo3Matches },
+        { path: 'algo4', component: Algo4Matches },
         { path: 'algo5', component: Algo5Matches },
         { path: "", redirect: "/bookmakers" }
       ]
