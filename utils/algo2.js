@@ -83,20 +83,27 @@ const sendAlgo2GooMatchesByEmail = async () => {
 
   for (var i = 0; i < matchesFromDB.length; i++) {
     var match = { ...matchesFromDB[i]._doc }
-    if (match.a1 >= 24 && match.h1 >= 24) {
-      match.risk = 'Good T1'
+
+    if ((match.h1 + match.a1) >= 24) {
+      match.risk = 'Medium 1'
     }
     if (match.probability >= 85) {
-      match.risk = 'Good T2'
+      match.risk = 'Medium 2'
     }
-    if (match.a1 >= 24 && match.h1 >= 24 && match.probability >= 85) {
-      match.risk = 'Great'
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 85) {
+      match.risk = 'Medium 3'
+    }
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
+      match.risk = 'Good 1'
+    }
+    if ((match.h1 + match.a1) >= 24 && match.probability >= 90) {
+      match.risk = 'Good 2'
     }
 
     matches.push(match)
   }
 
-  var matchesForEmail = matches.filter(match => match.risk === 'Good T1' || match.risk === 'Good T2' || match.risk === 'Great')
+  var matchesForEmail = matches.filter(match => match.risk === 'Medium 1' || match.risk === 'Medium 2' || match.risk === 'Medium 3' || match.risk === 'Good 1' || match.risk === 'Good 2')
 
   if (matchesForEmail.length) {
     var users = await User.find()
@@ -113,7 +120,7 @@ const sendAlgo2GooMatchesByEmail = async () => {
       var emailContentToCustomer = {
         from: 'Fyrebets <info@fyrebets.com>',
         to: user.email,
-        subject: "Algo4 Over/Under Strategy. There are matches to bet.",
+        subject: "Algo2 Over/Under Strategy. There are matches to bet.",
         text: emailText
       }
       mailgun.messages().send(emailContentToCustomer, function (error, body) {

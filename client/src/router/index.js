@@ -12,7 +12,6 @@ import MatchesToday from '../components/MatchesToday'
 import Watchlist from '../components/Watchlist'
 import Leagues from '../components/Leagues'
 
-import Prediction from '../components/prediction/Prediction'
 import Algo2Matches from '../components/algo2/Matches'
 import Algo3Matches from '../components/algo3/Matches'
 import Algo4Matches from '../components/algo4/Matches'
@@ -55,7 +54,6 @@ export default new VueRouter({
         { path: 'watchlist', component: Watchlist },
         { path: 'leagues', component: Leagues },
         { path: 'match/:id', component: MatchDetail },
-        { path: 'prediction', component: Prediction },
         { path: 'algo2', component: Algo2Matches },
         { path: 'algo3', component: Algo3Matches },
         { path: 'algo4', component: Algo4Matches },

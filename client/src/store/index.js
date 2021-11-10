@@ -3,7 +3,8 @@ import Vuex from "vuex"
 
 import AuthModule from "./auth"
 import matchModule from './match'
-import PredictionModule from './prediction'
+import BookmakerModule from './bookmaker'
+import LeagueModule from './league'
 import Algo2Module from './algo2'
 import Algo3Module from './algo3'
 import Algo4Module from './algo4'
@@ -16,7 +17,8 @@ export default new Vuex.Store({
   modules: { 
     auth: AuthModule, 
     match: matchModule, 
-    prediction: PredictionModule,
+    bookmaker: BookmakerModule,
+    league: LeagueModule,
     algo2: Algo2Module,
     algo3: Algo3Module,
     algo4: Algo4Module,

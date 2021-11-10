@@ -1,20 +1,5 @@
 <template>
   <div class="col-md-10 px-3 pb-3">
-    <!-- <div class="row">
-      <div class="col">
-        <div style="float:right">
-          <br />
-          <div style="float:right">
-            <button class="btn btn-secondary" v-on:click='scrape_leagues()'>
-              Scrape Leagues
-            </button>
-          </div>
-          <br />
-          <small style="float:right">This will scrape and update DB</small>
-        </div>
-      </div>
-    </div> -->
-
     <div class="row pt-2">
       <Spinner v-if="isLoading" />
       <div v-else>
@@ -60,11 +45,15 @@
     computed: {
       ...mapState({
         isLoading: state => state.match.isLoading,
-        countries: state => state.match.countries
+        countries: state => state.league.countries
       })
     },
     methods: {
-      ...mapActions(['scrapeLeagues', 'getLeagues', 'updateLeague']),
+      ...mapActions({
+        scrapeLeagues: 'league/scrapeLeagues',
+        getLeagues: 'league/getLeagues',
+        updateLeague: 'league/updateLeague'
+      }),
       async scrape_leagues() {
         await this.scrapeLeagues()
       },

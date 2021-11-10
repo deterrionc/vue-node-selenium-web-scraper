@@ -1,19 +1,5 @@
 <template>
   <div class="col-md-10 px-3 pb-3">
-    <!-- <div class="row">
-      <div class="col">
-        <div style="float:right">
-          <br />
-          <div style="float:right">
-            <button class="btn btn-secondary" v-on:click='scrape_bookmakers()'>
-              Scrape Bookmakers
-            </button>
-          </div>
-          <br />
-          <small style="float:right">This will scrape and update DB</small>
-        </div>
-      </div>
-    </div> -->
     <div class="row pt-2">
       <Spinner v-if="isLoading" />
       <div v-else>
@@ -257,19 +243,23 @@
       ...mapState({
         isScraping: state => state.match.isScraping,
         isLoading: state => state.match.isLoading,
-        premiumBookmakers: state => state.match.premiumBookmakers,
-        myBookmakers: state => state.match.myBookmakers,
-        czezhBookmakers: state => state.match.czezhBookmakers,
-        frenchBookmakers: state => state.match.frenchBookmakers,
-        italianBookmakers: state => state.match.italianBookmakers,
-        polishBookmakers: state => state.match.polishBookmakers,
-        russianBookmakers: state => state.match.russianBookmakers,
-        slovakBookmakers: state => state.match.slovakBookmakers,
-        spanishBookmakers: state => state.match.spanishBookmakers,
+        premiumBookmakers: state => state.bookmaker.premiumBookmakers,
+        myBookmakers: state => state.bookmaker.myBookmakers,
+        czezhBookmakers: state => state.bookmaker.czezhBookmakers,
+        frenchBookmakers: state => state.bookmaker.frenchBookmakers,
+        italianBookmakers: state => state.bookmaker.italianBookmakers,
+        polishBookmakers: state => state.bookmaker.polishBookmakers,
+        russianBookmakers: state => state.bookmaker.russianBookmakers,
+        slovakBookmakers: state => state.bookmaker.slovakBookmakers,
+        spanishBookmakers: state => state.bookmaker.spanishBookmakers,
       })
     },
     methods: {
-      ...mapActions(['scrapeBookmakers', 'getBookmakers', 'editBookmaker']),
+      ...mapActions({
+        scrapeBookmakers: 'bookmaker/scrapeBookmakers',
+        getBookmakers: 'bookmaker/getBookmakers',
+        editBookmaker: 'bookmaker/editBookmaker'
+      }),
       async scrape_bookmakers() {
         await this.scrapeBookmakers()
       },

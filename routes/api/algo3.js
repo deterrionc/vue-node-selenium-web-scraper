@@ -92,45 +92,37 @@ router.get('/scrapeMatches', async (req, res) => {
 
 module.exports = router
 
-const ruleForScrape = new schedule.RecurrenceRule()
-ruleForScrape.minute = 15
+// const ruleForScrape = new schedule.RecurrenceRule()
+// ruleForScrape.minute = 15
 
-const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
-  const date = new Date()
-  if (date.getHours() % 2 === 0) {
-    scrapePredictionMatches()
-  }
-})
-
-const remove_FK_FC_SC = (teamName) => {
-  var name = teamName.replace(' FK', '')
-  name = teamName.replace('FK ', '')
-  name = teamName.replace(' FC', '')
-  name = teamName.replace('FC ', '')
-  name = teamName.replace(' SC', '')
-  name = teamName.replace('SC ', '')
-  return name
-}
+// const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
+//   const date = new Date()
+//   if (date.getHours() % 2 === 0) {
+//     scrapePredictionMatches()
+//   }
+// })
 
 const scrapePredictionMatches = async () => {
   try {
-    const driver = await new webdriver.Builder()
-      .withCapabilities(webdriver.Capabilities.chrome())
-      .forBrowser('chrome')
-      .setChromeOptions(options)
-      .build()
+    // const driver = await new webdriver.Builder()
+    //   .withCapabilities(webdriver.Capabilities.chrome())
+    //   .forBrowser('chrome')
+    //   .setChromeOptions(options)
+    //   .build()
 
-    await driver.get('https://www.oddsportal.com/login/')
-    await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
-    await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
-    await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
-    await driver.get('https://www.oddsportal.com/matches/soccer/')
-    await driver.findElement(By.id('user-header-oddsformat-expander')).click()
-    await driver.findElement(By.linkText('EU Odds')).click()
+    // await driver.get('https://www.oddsportal.com/login/')
+    // await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+    // await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+    // await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+    // await driver.get('https://www.oddsportal.com/matches/soccer/')
+    // await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+    // await driver.findElement(By.linkText('EU Odds')).click()
 
-    const matchesFromDB = await Match.find({ IsNew: true, active: true })
+    // const matchesFromDB = await Match.find({ IsNew: true, active: true })
 
-    // await Prediction.deleteMany({ IsNew: false })
+    const matches = await getTodayOddsMatcheNames()
+    console.log(matches)
+
     await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
     var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
@@ -168,40 +160,143 @@ const scrapePredictionMatches = async () => {
 
         var matchName = firstTeam + ' - ' + secondTeam
 
-        for (var j = 0; j < matchesFromDB.length; j++) {
-          var oddMatch = { ...matchesFromDB[j]._doc }
+        // if (checkDateAvailable(date)) {
+        //   console.log(checkDateAvailable(date))
+        // }
 
-          if (matchName === oddMatch.name) {
-            oddLink = oddMatch.link + oddLink
+        // for (var j = 0; j < matchesFromDB.length; j++) {
+        //   var oddMatch = { ...matchesFromDB[j]._doc }
 
-            await driver.get(oddLink)
-            var ouTableContent = await driver.findElement(By.id('odds-data-table'))
-            var ouTableContentText = await ouTableContent.getText()
-            var textArray = ouTableContentText.split('Compare odds\n')
-            var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
-            var targetValuesArray = targetText.split('\n')
-            handicapOver = targetValuesArray[3]
-          }
-        }
+        //   if (matchName === oddMatch.name) {
+        //     oddLink = oddMatch.link + oddLink
+
+        //     await driver.get(oddLink)
+        //     var ouTableContent = await driver.findElement(By.id('odds-data-table'))
+        //     var ouTableContentText = await ouTableContent.getText()
+        //     var textArray = ouTableContentText.split('Compare odds\n')
+        //     var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
+        //     var targetValuesArray = targetText.split('\n')
+        //     handicapOver = targetValuesArray[3]
+        //   }
+        // }
 
         var newPrediction = new Prediction({
           winningTeam, percent, link, firstTeam, secondTeam, country, league, date, handicapOver
         })
 
-        await newPrediction.save()
+        // console.log(newPrediction)
+
+        // await newPrediction.save()
         console.log('Algo3. One Match Added!')
       }
     }
 
-    var goodPredictions = await getGoodPredictions()
-    await sendCustomersEmailGoodMatches(goodPredictions)
+    // var goodPredictions = await getGoodPredictions()
+    // await sendCustomersEmailGoodMatches(goodPredictions)
 
-    await driver.close()
-    await driver.quit()
+    // await driver.close()
+    // await driver.quit()
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 3 --------------')
     console.log(error)
   }
+}
+
+const checkDateAvailable = (date) => {
+  var today = new Date()
+  var year = today.getFullYear()
+  var month = today.getMonth() + 1
+  var day = today.getDate()
+  var availableDate1 = `${year}-${month}-${day + 2}`
+  var availableDate2 = `${year}-${month}-${day + 3}`
+  if (date === availableDate1) return true
+  else if (date === availableDate2) return true
+  else return false
+}
+
+const getTodayOddsMatcheNames = async () => {
+  console.log('GET ALGO 3 ODDS MATCHES')
+  var matches = []
+  const driver = await new webdriver.Builder()
+    .withCapabilities(webdriver.Capabilities.chrome())
+    .forBrowser('chrome')
+    .setChromeOptions(options)
+    .build()
+
+  try {
+    await driver.get('https://www.oddsportal.com/login/')
+    await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+    await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+    await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+
+    await driver.get('https://www.oddsportal.com/matches/soccer/')
+    await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+    await driver.findElement(By.linkText('EU Odds')).click()
+
+    var tableMatches = await driver.findElement(By.id('table-matches'))
+    var tableContent = await tableMatches.getAttribute('innerHTML')
+
+    var htmlTableTrs = tableContent.split('<tbody>').pop()
+    htmlTableTrs = htmlTableTrs.slice(0, htmlTableTrs.indexOf('</tbody>'))
+    htmlTableTrs = htmlTableTrs.split('xtid')
+    htmlTableTrs.shift()
+
+    for (var i = 0; i < htmlTableTrs.length; i++) {
+      var htmlTableTr = htmlTableTrs[i]
+      var htmlMatchTrs = htmlTableTr.split('xeid')
+      htmlMatchTrs.shift()
+
+      for (var j = 0; j < htmlMatchTrs.length; j++) {
+        var htmlMatchTr = htmlMatchTrs[j]
+        var htmlMatchTds = htmlMatchTr.split('<td')
+        htmlMatchTds.shift()
+        var name = htmlMatchTds[1].slice(htmlMatchTds[1].indexOf('<a'), htmlMatchTds[1].indexOf('</td>'))
+        name = name.slice(name.lastIndexOf('/">') + 3, name.lastIndexOf('</a>'))
+        name = deleteMatchNameSpan(name)
+        var link = htmlMatchTds[1].slice(htmlMatchTds[1].lastIndexOf('href="/') + 6, htmlMatchTds[1].lastIndexOf('/">'))
+        var link = 'https://www.oddsportal.com' + link
+
+        var match = {
+          name,
+          link
+        }
+
+        matches.push(match)
+      }
+    }
+
+    await driver.close()
+    await driver.quit()
+
+    return matches
+  } catch (err) {
+    await driver.close()
+    await driver.quit()
+
+    return matches
+  }
+}
+
+const remove_FK_FC_SC = (teamName) => {
+  var name = teamName.replace(' FK', '')
+  name = teamName.replace('FK ', '')
+  name = teamName.replace(' FC', '')
+  name = teamName.replace('FC ', '')
+  name = teamName.replace(' SC', '')
+  name = teamName.replace('SC ', '')
+  return name
+}
+
+const deleteMatchNameSpan = (matchName) => {
+  var teamNames = matchName.split(' - ')
+  for (var i = 0; i < teamNames.length; i++) {
+    var teamName = teamNames[i]
+    if (teamName.indexOf('</span>') > 0) {
+      teamName = teamName.slice(teamName.indexOf('">') + 2, teamName.indexOf('</'))
+    }
+    teamNames[i] = teamName
+  }
+  return (teamNames[0] + ' - ' + teamNames[1])
 }
 
 const getGoodPredictions = async () => {
