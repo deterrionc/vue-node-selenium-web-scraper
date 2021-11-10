@@ -668,43 +668,43 @@ const scrapeOnMatchTimeForValidCheck = async () => {
   watchList = tempWatchListForSet
 }
 
-const ruleForMatch1 = new schedule.RecurrenceRule()
-ruleForMatch1.minute = 10
+// const ruleForMatch1 = new schedule.RecurrenceRule()
+// ruleForMatch1.minute = 10
 
-const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
-  scrapeOnMatchTimeForValidCheck()
-})
+// const scheduleForMatch1 = schedule.scheduleJob(ruleForMatch1, () => {
+//   scrapeOnMatchTimeForValidCheck()
+// })
 
-const ruleForMatch2 = new schedule.RecurrenceRule()
-ruleForMatch2.minute = 25
+// const ruleForMatch2 = new schedule.RecurrenceRule()
+// ruleForMatch2.minute = 25
 
-const scheduleForMatch2 = schedule.scheduleJob(ruleForMatch2, () => {
-  scrapeOnMatchTimeForValidCheck()
-})
+// const scheduleForMatch2 = schedule.scheduleJob(ruleForMatch2, () => {
+//   scrapeOnMatchTimeForValidCheck()
+// })
 
-const ruleForMatch3 = new schedule.RecurrenceRule()
-ruleForMatch3.minute = 40
+// const ruleForMatch3 = new schedule.RecurrenceRule()
+// ruleForMatch3.minute = 40
 
-const scheduleForMatch3 = schedule.scheduleJob(ruleForMatch3, () => {
-  scrapeOnMatchTimeForValidCheck()
-})
+// const scheduleForMatch3 = schedule.scheduleJob(ruleForMatch3, () => {
+//   scrapeOnMatchTimeForValidCheck()
+// })
 
-const ruleForMatch4 = new schedule.RecurrenceRule()
-ruleForMatch4.minute = 55
+// const ruleForMatch4 = new schedule.RecurrenceRule()
+// ruleForMatch4.minute = 55
 
-const scheduleForMatch4 = schedule.scheduleJob(ruleForMatch4, () => {
-  scrapeOnMatchTimeForValidCheck()
-})
+// const scheduleForMatch4 = schedule.scheduleJob(ruleForMatch4, () => {
+//   scrapeOnMatchTimeForValidCheck()
+// })
 
-const ruleForScrape = new schedule.RecurrenceRule()
-ruleForScrape.minute = 5
+// const ruleForScrape = new schedule.RecurrenceRule()
+// ruleForScrape.minute = 5
 
-const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
-  const date = new Date()
-  if (date.getHours() % 2 === 0) {
-    scrapeMatchesToday()
-  }
-})
+// const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
+//   const date = new Date()
+//   if (date.getHours() % 2 === 0) {
+//     scrapeMatchesToday()
+//   }
+// })
 
 router.get('/scrapeMatchesToday', async (req, res) => {
   await scrapeMatchesToday()

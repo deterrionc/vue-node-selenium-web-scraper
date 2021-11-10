@@ -35,45 +35,7 @@ options.addArguments(
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 3 MATCHES')
 
-  const predictionsFromDB = await Prediction.find({ IsNew: true })
-  const matchesFromDB = await Match.find({ IsNew: true, active: true })
-  var date = new Date()
-  var year = date.getFullYear()
-  var month = date.getMonth() + 1
-  var day = date.getDate()
-  var today = new Date(`${year}-${month}-${day}`)
-  var predictions = []
-
-  for (var i = 0; i < predictionsFromDB.length; i++) {
-    var prediction = { ...predictionsFromDB[i]._doc }
-    var pFirstTeam = remove_FK_FC_SC(prediction.firstTeam)
-    var pSecondTeam = remove_FK_FC_SC(prediction.secondTeam)
-    var intervalInDays = (prediction.date - today) / 86400000
-
-    if (intervalInDays >= 0 && intervalInDays < 2) {
-      prediction.risk1 = 'Available'
-    } else {
-      prediction.risk1 = null
-    }
-
-    for (var j = 0; j < matchesFromDB.length; j++) {
-      var match = { ...matchesFromDB[j]._doc }
-      var teamNames = match.name.split(' - ')
-      var mFirstTeam = remove_FK_FC_SC(teamNames[0])
-      var mSecondTeam = remove_FK_FC_SC(teamNames[1])
-
-      if (prediction.risk1 === 'Available') {
-        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
-          prediction.risk2 = 'Good'
-        }
-      } else {
-        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
-          prediction.risk2 = 'Exist'
-        }
-      }
-    }
-    predictions.push(prediction)
-  }
+  const predictions = await getGoodPredictions()
 
   res.json({
     success: true,
@@ -92,36 +54,19 @@ router.get('/scrapeMatches', async (req, res) => {
 
 module.exports = router
 
-// const ruleForScrape = new schedule.RecurrenceRule()
-// ruleForScrape.minute = 15
+const ruleForScrape = new schedule.RecurrenceRule()
+ruleForScrape.minute = 15
 
-// const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
-//   const date = new Date()
-//   if (date.getHours() % 2 === 0) {
-//     scrapePredictionMatches()
-//   }
-// })
+const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
+  const date = new Date()
+  if (date.getHours() % 8 === 1) {
+    scrapePredictionMatches()
+  }
+})
 
 const scrapePredictionMatches = async () => {
   try {
-    // const driver = await new webdriver.Builder()
-    //   .withCapabilities(webdriver.Capabilities.chrome())
-    //   .forBrowser('chrome')
-    //   .setChromeOptions(options)
-    //   .build()
-
-    // await driver.get('https://www.oddsportal.com/login/')
-    // await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
-    // await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
-    // await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
-    // await driver.get('https://www.oddsportal.com/matches/soccer/')
-    // await driver.findElement(By.id('user-header-oddsformat-expander')).click()
-    // await driver.findElement(By.linkText('EU Odds')).click()
-
-    // const matchesFromDB = await Match.find({ IsNew: true, active: true })
-
     const matches = await getTodayOddsMatcheNames()
-    console.log(matches)
 
     await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
@@ -158,60 +103,34 @@ const scrapePredictionMatches = async () => {
         var oddLink = '/#over-under;2'
         var handicapOver = null
 
-        var matchName = firstTeam + ' - ' + secondTeam
+        for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
+          var teamNames = matches[matchIndex].name.split(' - ')
+          var pFirstTeam = remove_FK_FC_SC(firstTeam)
+          var pSecondTeam = remove_FK_FC_SC(secondTeam)
+          var mFirstTeam = remove_FK_FC_SC(teamNames[0])
+          var mSecondTeam = remove_FK_FC_SC(teamNames[1])
 
-        // if (checkDateAvailable(date)) {
-        //   console.log(checkDateAvailable(date))
-        // }
-
-        // for (var j = 0; j < matchesFromDB.length; j++) {
-        //   var oddMatch = { ...matchesFromDB[j]._doc }
-
-        //   if (matchName === oddMatch.name) {
-        //     oddLink = oddMatch.link + oddLink
-
-        //     await driver.get(oddLink)
-        //     var ouTableContent = await driver.findElement(By.id('odds-data-table'))
-        //     var ouTableContentText = await ouTableContent.getText()
-        //     var textArray = ouTableContentText.split('Compare odds\n')
-        //     var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
-        //     var targetValuesArray = targetText.split('\n')
-        //     handicapOver = targetValuesArray[3]
-        //   }
-        // }
+          if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
+            oddLink = matches[matchIndex].link + oddLink
+            handicapOver = await getHandicapOverValue(oddLink)
+          }
+        }
 
         var newPrediction = new Prediction({
           winningTeam, percent, link, firstTeam, secondTeam, country, league, date, handicapOver
         })
 
-        // console.log(newPrediction)
-
-        // await newPrediction.save()
+        await newPrediction.save()
         console.log('Algo3. One Match Added!')
       }
     }
 
-    // var goodPredictions = await getGoodPredictions()
-    // await sendCustomersEmailGoodMatches(goodPredictions)
-
-    // await driver.close()
-    // await driver.quit()
+    var goodPredictions = await getGoodPredictions()
+    await sendCustomersEmailGoodMatches(goodPredictions)
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 3 --------------')
     console.log(error)
   }
-}
-
-const checkDateAvailable = (date) => {
-  var today = new Date()
-  var year = today.getFullYear()
-  var month = today.getMonth() + 1
-  var day = today.getDate()
-  var availableDate1 = `${year}-${month}-${day + 2}`
-  var availableDate2 = `${year}-${month}-${day + 3}`
-  if (date === availableDate1) return true
-  else if (date === availableDate2) return true
-  else return false
 }
 
 const getTodayOddsMatcheNames = async () => {
@@ -277,6 +196,43 @@ const getTodayOddsMatcheNames = async () => {
   }
 }
 
+const getHandicapOverValue = async (oddLink) => {
+  var handicapValue = null
+
+  const driver = await new webdriver.Builder()
+    .withCapabilities(webdriver.Capabilities.chrome())
+    .forBrowser('chrome')
+    .setChromeOptions(options)
+    .build()
+
+  try {
+    await driver.get('https://www.oddsportal.com/login/')
+    await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
+    await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
+    await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+
+    await driver.get('https://www.oddsportal.com/matches/soccer/')
+    await driver.findElement(By.id('user-header-oddsformat-expander')).click()
+    await driver.findElement(By.linkText('EU Odds')).click()
+
+    await driver.get(oddLink)
+    var ouTableContent = await driver.findElement(By.id('odds-data-table'))
+    var ouTableContentText = await ouTableContent.getText()
+    var textArray = ouTableContentText.split('Compare odds\n')
+    var targetText = textArray.find(element => element.indexOf('Over/Under +2.5') > -1)
+    var targetValuesArray = targetText.split('\n')
+    handicapValue = targetValuesArray[3]
+
+    await driver.close()
+    await driver.quit()
+
+    return handicapValue
+  } catch (err) {
+    console.log(err)
+    return handicapValue
+  }
+}
+
 const remove_FK_FC_SC = (teamName) => {
   var name = teamName.replace(' FK', '')
   name = teamName.replace('FK ', '')
@@ -300,19 +256,15 @@ const deleteMatchNameSpan = (matchName) => {
 }
 
 const getGoodPredictions = async () => {
-  const predictionsFromDB = await Prediction.find({ IsNew: true })
-  const matchesFromDB = await Match.find({ IsNew: true, active: true })
+  const predictionsFromDB = await Prediction.find({IsNew: true})
   var date = new Date()
   var year = date.getFullYear()
   var month = date.getMonth() + 1
   var day = date.getDate()
   var today = new Date(`${year}-${month}-${day}`)
   var predictions = []
-
   for (var i = 0; i < predictionsFromDB.length; i++) {
     var prediction = { ...predictionsFromDB[i]._doc }
-    var pFirstTeam = remove_FK_FC_SC(prediction.firstTeam)
-    var pSecondTeam = remove_FK_FC_SC(prediction.secondTeam)
     var intervalInDays = (prediction.date - today) / 86400000
 
     if (intervalInDays >= 0 && intervalInDays < 2) {
@@ -321,22 +273,14 @@ const getGoodPredictions = async () => {
       prediction.risk1 = null
     }
 
-    for (var j = 0; j < matchesFromDB.length; j++) {
-      var match = { ...matchesFromDB[j]._doc }
-      var teamNames = match.name.split(' - ')
-      var mFirstTeam = remove_FK_FC_SC(teamNames[0])
-      var mSecondTeam = remove_FK_FC_SC(teamNames[1])
-
-      if (prediction.risk1 === 'Available') {
-        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
-          prediction.risk2 = 'Good'
-        }
-      } else {
-        if (pFirstTeam === mFirstTeam && pSecondTeam === mSecondTeam) {
-          prediction.risk2 = 'Exist'
-        }
-      }
+    if (prediction.handicapOver === null) {
+      prediction.risk2 = null
+    } else if (prediction.handicapOver >= 1.3 && prediction.handicapOver <= 1.8) {
+      prediction.risk2 = 'Good'
+    } else {
+      prediction.risk2 = 'Exist'
     }
+
     predictions.push(prediction)
   }
 
