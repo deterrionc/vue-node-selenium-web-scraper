@@ -35,8 +35,8 @@ router.get('/scrapeMatches', async (req, res) => {
     .build()
 
   await driver.get('https://www.whoscored.com/Betting/Facts')
-  var htmlContent = await driver.findElement(By.xpath('//*'))
-  htmlContent = await htmlContent.getAttribute('outerHTML')
+  var htmlContent = await driver.findElement(By.id('main-iframe'))
+  htmlContent = await htmlContent.getAttribute('innerHTML')
   console.log(htmlContent)
   // await driver.findElement(By.xpath('//div[@id="facts-filter-matchMarket"]/select[@class="filter-drop"]')).click()
   // await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
