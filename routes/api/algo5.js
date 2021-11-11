@@ -31,11 +31,12 @@ router.get('/scrapeMatches', async (req, res) => {
     .setChromeOptions(options)
     .build()
 
-  await driver.get('https://1xbet.whoscored.com/Betting/Facts')
-  // await driver.sleep(10000)
-
-  await driver.findElement(By.xpath('//div[@id="facts-filter-matchMarket"]/select[@class="filter-drop"]')).click()
-  await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
+  await driver.get('https://www.whoscored.com/Betting/Facts')
+  var htmlContent = await driver.findElement(By.xpath('//*'))
+  htmlContent = await htmlContent.getAttribute('outerHTML')
+  console.log(htmlContent)
+  // await driver.findElement(By.xpath('//div[@id="facts-filter-matchMarket"]/select[@class="filter-drop"]')).click()
+  // await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
 
   // var tableMatches = await driver.findElement(By.xpath('//body'))
   // var tableContent = await tableMatches.getAttribute('innerHTML')
