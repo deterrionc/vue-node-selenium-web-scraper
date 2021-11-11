@@ -35,6 +35,7 @@ router.get('/scrapeMatches', async (req, res) => {
     .build()
 
   await driver.get('https://www.whoscored.com/Betting/Facts')
+  await driver.sleep(3000)
   var htmlContent = await driver.findElement(By.id('main-iframe'))
   htmlContent = await htmlContent.getAttribute('innerHTML')
   console.log(htmlContent)
