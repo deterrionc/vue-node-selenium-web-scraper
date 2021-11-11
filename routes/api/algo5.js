@@ -17,6 +17,7 @@ options.addArguments(
 )
 
 router.get('/getMatches', async (req, res) => {
+  console.log('GET ALGO 5 MATCHES')
 
   res.json({
     success: true,
@@ -25,6 +26,8 @@ router.get('/getMatches', async (req, res) => {
 })
 
 router.get('/scrapeMatches', async (req, res) => {
+  console.log('SCRAPE ALGO 5 MATCHES')
+
   const driver = await new webdriver.Builder()
     .withCapabilities(webdriver.Capabilities.chrome())
     .forBrowser('chrome')
