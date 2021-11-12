@@ -47,10 +47,9 @@ const scrapeMatches = async () => {
     var tableTds = tableTr.split('</td>')
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('content="') + 9, tableTds[0].indexOf('" class=')).trim()
-      // time = new Date(time).toLocaleString(undefined, {
-      //   timeZone: 'America/Barbados'
-      // })
-      time = new Date(time)
+      time = new Date(new Date(time).toLocaleString(undefined, {
+        timeZone: 'America/Los_Angeles'
+      }))
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
       var name = tableTds[2].slice(tableTds[2].indexOf('itemprop="name">') + 16, tableTds[2].indexOf('</span>')).trim()
       var link = tableTds[2].slice(tableTds[2].indexOf('href="') + 6, tableTds[2].indexOf('title="') - 1).trim()
