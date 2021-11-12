@@ -16,6 +16,7 @@ import Algo2Matches from '../components/algo2/Matches'
 import Algo3Matches from '../components/algo3/Matches'
 import Algo4Matches from '../components/algo4/Matches'
 import Algo5Matches from '../components/algo5/Matches'
+import Algo6Matches from '../components/algo6/Matches'
 
 import dataStore from '../store'
 
@@ -58,6 +59,7 @@ export default new VueRouter({
         { path: 'algo3', component: Algo3Matches },
         { path: 'algo4', component: Algo4Matches },
         { path: 'algo5', component: Algo5Matches },
+        { path: 'algo6', component: Algo6Matches },
         { path: "", redirect: "/bookmakers" }
       ]
     },

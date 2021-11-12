@@ -16,17 +16,17 @@ export default {
   actions: {
     async getMatches(context) {
       this.commit('setIsLoading', true)
-      const res = await api.get('/algo4/getMatches')
+      const res = await api.get('/algo6/getMatches')
       if (res.data.success) {
         await context.commit('setMatches', res.data.matches)
         this.commit('setIsLoading', false)
       }
     },
     async scrapeMatches(context) {
-      context.commit('setIsLoading', true)
-      const res = await api.get('/algo4/scrapeMatches')
+      this.commit('setIsLoading', true)
+      const res = await api.get('/algo6/scrapeMatches')
       if (res.data.success) {
-        this.commit('setIsLoading', true)
+        context.dispatch('getMatches')
       }
     },
   }

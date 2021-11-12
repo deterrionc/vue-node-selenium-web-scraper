@@ -53,6 +53,12 @@
             Algo 5 Matches
           </button>
         </div>
+        <div class="row my-2">
+          <button class="btn btn-block" v-on:click="SetCurrentMatch('algo6')"
+          v-bind:class="currentMatch === 'algo6' ? 'btn-light' : 'btn-success'">
+            Algo 6 Matches
+          </button>
+        </div>
         <hr style="color: white; height: 3px;">
         <div class="row my-2">
           <button class="btn btn-block btn-danger" v-on:click='LOGOUT'>

@@ -15,15 +15,15 @@ export default {
   },
   actions: {
     async getMatches(context) {
-      context.commit('setIsLoading', true)
+      this.commit('setIsLoading', true)
       const res = await api.get('/algo2/getMatches')
       if (res.data.success) {
         await context.commit('setMatches', res.data.matches)
-        context.commit('setIsLoading', false)
+        this.commit('setIsLoading', false)
       }
     },
     async scrapeMatches(context) {
-      context.commit('setIsLoading', true)
+      this.commit('setIsLoading', true)
       const res = await api.get('/algo2/scrapeMatches')
       if (res.data.success) {
         context.dispatch('getMatches')

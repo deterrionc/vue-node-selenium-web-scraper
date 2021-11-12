@@ -32,6 +32,7 @@ app.use('/api/algo2', require('./routes/api/algo2'))
 app.use('/api/algo3', require('./routes/api/algo3'))
 app.use('/api/algo4', require('./routes/api/algo4'))
 app.use('/api/algo5', require('./routes/api/algo5'))
+app.use('/api/algo6', require('./routes/api/algo6'))
 
 // Serve frontend built
 app.use(express.static(__dirname + '/client/dist'))
