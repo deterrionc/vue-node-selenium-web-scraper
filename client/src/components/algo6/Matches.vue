@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Time(GMT - 4)</th>
+                <th style='min-width: 150px;'>Time(GMT - 4)</th>
                 <th>Name</th>
                 <th>Flag</th>
                 <th>Country</th>
