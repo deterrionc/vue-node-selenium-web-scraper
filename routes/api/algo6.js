@@ -48,7 +48,6 @@ const scrapeMatches = async () => {
     var tableTds = tableTr.split('</td>')
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('ick-off">') + 9, tableTds[0].indexOf('</span>')).trim()
-      console.log(time)
       // time = (new Date(Date.UTC(time)).toLocaleString(undefined, {
       //   timeZone: 'UTC'
       // }))
@@ -61,6 +60,9 @@ const scrapeMatches = async () => {
       var competition_league =  tableTds[1].slice(tableTds[1].indexOf('<span title="') + 13, tableTds[1].lastIndexOf('" class="')).trim()
       var competition = (competition_league.split(' - '))[0]
       var league = (competition_league.split(' - '))[1]
+
+      console.log(name)
+      console.log(time)
 
       let newAlgo6Match = new Algo6Match({
         time, flag, name, link, style, logic, competition, league
