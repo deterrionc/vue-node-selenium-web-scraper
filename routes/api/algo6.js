@@ -6,6 +6,7 @@ const axios = require('axios')
 
 // MODELS
 const Algo6Match = require('../../models/Algo6Match')
+const { titleMatches } = require('selenium-webdriver/lib/until')
 
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
@@ -48,7 +49,7 @@ const scrapeMatches = async () => {
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('content="') + 9, tableTds[0].indexOf('" class=')).trim()
       console.log(time)
-      time = new Date(new Date(time).toLocaleString(undefined, {
+      time = (new Date(Date.UTC(time)).toLocaleString(undefined, {
         timeZone: 'UTC'
       }))
       console.log(time)
