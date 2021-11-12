@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Time(GMT + 0)</th>
+                <th>Time(GMT - 4)</th>
                 <th>Name</th>
                 <th>Flag</th>
                 <th>Country</th>
@@ -34,7 +34,7 @@
             <tbody>
               <tr v-for='(match, index) in matches' v-bind:key="index">
                 <td>{{index + 1}}</td>
-                <td>{{match.time}}</td>
+                <td>{{match.time.slice(0, 16)}}</td>
                 <td>{{match.name}}</td>
                 <td>
                   <img :src='match.flag' width="40px" />
