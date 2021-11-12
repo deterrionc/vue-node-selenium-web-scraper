@@ -48,12 +48,16 @@ const scrapeMatches = async () => {
     var tableTds = tableTr.split('</td>')
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('ick-off">') + 9, tableTds[0].indexOf('</span>')).trim()
+      console.log('original', time)
       var year = (time.split(' ')[0]).split('-')[0]
       var month = (time.split(' ')[0]).split('-')[1]
       var date = (time.split(' ')[0]).split('-')[2]
-      var hour = (time.split(' ')[1]).split('-')[0]
-      var minute = (time.split(' ')[1]).split('-')[1]
-      console.log(year, month, date, hour, minute)
+      var hour = (time.split(' ')[1]).split(':')[0]
+      var minute = (time.split(' ')[1]).split(':')[1]
+      
+      time = new Date(Date.UTC(year, month, date, hour, minute, 0))
+      console.log(time)
+
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
       var name = tableTds[2].slice(tableTds[2].indexOf('itemprop="name">') + 16, tableTds[2].indexOf('</span>')).trim()
       var link = tableTds[2].slice(tableTds[2].indexOf('href="') + 6, tableTds[2].indexOf('title="') - 1).trim()
