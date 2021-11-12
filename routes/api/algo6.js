@@ -56,6 +56,8 @@ const scrapeMatches = async () => {
       var minute = (time.split(' ')[1]).split(':')[1]
       
       time = new Date(Date.UTC(year, month, date, hour, minute, 0))
+
+      time = new Date(time.valueOf() + (-4) * 60000)
       console.log(time)
 
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
