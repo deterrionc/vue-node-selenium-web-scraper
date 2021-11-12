@@ -10,6 +10,9 @@ const Algo6Match = require('../../models/Algo6Match')
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
 
+  var date = new Date('2021-11-12T22:00:00')
+  console.log(date)
+
   const matches = await Algo6Match.find({ IsNew: true })
 
   res.json({
