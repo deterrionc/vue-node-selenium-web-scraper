@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Algo6MatchSchema = new Schema({
   time: {
-    type: String
+    type: Date
   },
   flag: {
     type: String
