@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Time</th>
+                <th>Time(GMT + 0)</th>
                 <th>Name</th>
                 <th>Flag</th>
                 <th>Country</th>
