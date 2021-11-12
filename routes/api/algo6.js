@@ -48,7 +48,9 @@ const scrapeMatches = async () => {
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('content="') + 9, tableTds[0].indexOf('" class=')).trim()
       console.log(time)
-      time = new Date(time)
+      time = (new Date(time).toLocaleString(undefined, {
+        timeZone: 'UTC'
+      }))
       console.log(time)
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
       var name = tableTds[2].slice(tableTds[2].indexOf('itemprop="name">') + 16, tableTds[2].indexOf('</span>')).trim()
