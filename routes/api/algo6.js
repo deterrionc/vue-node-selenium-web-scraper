@@ -10,9 +10,6 @@ const Algo6Match = require('../../models/Algo6Match')
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
 
-  var date = new Date('2021-11-12T22:00:00')
-  console.log(date)
-
   const matches = await Algo6Match.find({ IsNew: true })
 
   res.json({
@@ -50,9 +47,9 @@ const scrapeMatches = async () => {
     var tableTds = tableTr.split('</td>')
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('content="') + 9, tableTds[0].indexOf('" class=')).trim()
-      // time = (new Date(time).toLocaleString(undefined, {
-      //   timeZone: 'America/Manaus'
-      // }))
+      time = (new Date(time).toLocaleString(undefined, {
+        timeZone: 'America/Manaus'
+      }))
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
       var name = tableTds[2].slice(tableTds[2].indexOf('itemprop="name">') + 16, tableTds[2].indexOf('</span>')).trim()
       var link = tableTds[2].slice(tableTds[2].indexOf('href="') + 6, tableTds[2].indexOf('title="') - 1).trim()
