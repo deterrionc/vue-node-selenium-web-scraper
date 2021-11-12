@@ -34,14 +34,16 @@ const scrapeMatches = async () => {
   const overTableContent = htmlContent.slice(htmlContent.indexOf('<tbody>') + 7, htmlContent.indexOf('</tbody>'))
   const underTableContent = htmlContent.slice(htmlContent.lastIndexOf('<tbody>') + 7, htmlContent.lastIndexOf('</tbody>'))
   const tableContent = overTableContent + underTableContent
-  
+
   var tableTrs = tableContent.split('</tr>')
 
   if (tableTrs.length > 3) {
     await Algo6Match.updateMany({ IsNew: true }, { IsNew: false })
   }
-  
+
   tableTrs.pop()
+
+  var months = [1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
   for (var trIndex = 0; trIndex < tableTrs.length; trIndex++) {
     var tableTr = tableTrs[trIndex]
@@ -50,14 +52,14 @@ const scrapeMatches = async () => {
       var time = tableTds[0].slice(tableTds[0].indexOf('ick-off">') + 9, tableTds[0].indexOf('</span>')).trim()
       console.log('original', time)
       var year = (time.split(' ')[0]).split('-')[0]
-      var month = (time.split(' ')[0]).split('-')[1]
+      var month = months[(time.split(' ')[0]).split('-')[1]]
       var date = (time.split(' ')[0]).split('-')[2]
       var hour = (time.split(' ')[1]).split(':')[0]
       var minute = (time.split(' ')[1]).split(':')[1]
-      
+
       time = new Date(Date.UTC(year, month, date, hour, minute, 0))
 
-      time = new Date(time.valueOf() + (-4) * 60000)
+      time = new Date(time.valueOf() + (-4) * 3600000)
       console.log(time)
 
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
@@ -65,7 +67,7 @@ const scrapeMatches = async () => {
       var link = tableTds[2].slice(tableTds[2].indexOf('href="') + 6, tableTds[2].indexOf('title="') - 1).trim()
       var style = tableTds[3].slice(tableTds[3].indexOf('">') + 2, tableTds[3].indexOf('</span>')).trim()
       var logic = tableTds[4].slice(tableTds[4].indexOf('center">') + 8, tableTds[4].length).trim()
-      var competition_league =  tableTds[1].slice(tableTds[1].indexOf('<span title="') + 13, tableTds[1].lastIndexOf('" class="')).trim()
+      var competition_league = tableTds[1].slice(tableTds[1].indexOf('<span title="') + 13, tableTds[1].lastIndexOf('" class="')).trim()
       var competition = (competition_league.split(' - '))[0]
       var league = (competition_league.split(' - '))[1]
 
