@@ -15,7 +15,6 @@ const schedule = require('node-schedule')
 
 // Mongo Models
 const Prediction = require('../../models/Prediction')
-const Match = require('../../models/Match')
 const User = require('../../models/User')
 
 // Selenium Webdriver

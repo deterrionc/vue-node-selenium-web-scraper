@@ -1,17 +1,22 @@
 const express = require('express')
 const router = express.Router()
+const config = require('config')
+
+// Mailgun Info
+const mailgunApiKey = config.get('mailgun.mailgunApiKey')
+const mailgunDomain = config.get('mailgun.domain')
+var mailgun = require('mailgun-js')({ apiKey: mailgunApiKey, domain: mailgunDomain })
 
 // For Scraping
 const axios = require('axios')
 
 // MODELS
 const Algo6Match = require('../../models/Algo6Match')
-const { titleMatches } = require('selenium-webdriver/lib/until')
 
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
 
-  const matches = await Algo6Match.find({ IsNew: true })
+  const matches = await getGoodMatches()
 
   res.json({
     success: true,
@@ -23,6 +28,7 @@ router.get('/scrapeMatches', async (req, res) => {
   console.log('SCRAPE ALGO 6 MATCHES')
 
   await scrapeMatches()
+  await sendEmail()
 
   res.json({
     success: true
@@ -50,7 +56,6 @@ const scrapeMatches = async () => {
     var tableTds = tableTr.split('</td>')
     try {
       var time = tableTds[0].slice(tableTds[0].indexOf('ick-off">') + 9, tableTds[0].indexOf('</span>')).trim()
-      console.log('original', time)
       var year = (time.split(' ')[0]).split('-')[0]
       var month = months[(time.split(' ')[0]).split('-')[1] - 1]
       var date = (time.split(' ')[0]).split('-')[2]
@@ -59,7 +64,6 @@ const scrapeMatches = async () => {
 
       time = new Date(Date.UTC(year, month, date, hour, minute, 0))
       time = new Date(time.valueOf() + (-4) * 3600000)
-      console.log(time)
 
       var flag = tableTds[1].slice(tableTds[1].indexOf('url(') + 5, tableTds[1].lastIndexOf('")')).trim()
       var name = tableTds[2].slice(tableTds[2].indexOf('itemprop="name">') + 16, tableTds[2].indexOf('</span>')).trim()
@@ -68,10 +72,9 @@ const scrapeMatches = async () => {
       var logic = tableTds[4].slice(tableTds[4].indexOf('center">') + 8, tableTds[4].length).trim()
       var competition_league = tableTds[1].slice(tableTds[1].indexOf('<span title="') + 13, tableTds[1].lastIndexOf('" class="')).trim()
       var competition = (competition_league.split(' - '))[0]
-      var league = (competition_league.split(' - '))[1]
+      var league = convertSpanishToEnglish((competition_league.split(' - '))[1])
 
-      // console.log(name)
-      // console.log(time)
+      console.log(league)
 
       let newAlgo6Match = new Algo6Match({
         time, flag, name, link, style, logic, competition, league
@@ -82,6 +85,52 @@ const scrapeMatches = async () => {
 
     }
   }
+}
+
+const convertSpanishToEnglish = word => {
+  var tempWord = word.replace('&#243;', 'ó')
+  tempWord = tempWord.replace('&#250;', 'ú')
+  tempWord = tempWord.replace('&#39;', "'")
+  tempWord = tempWord.replace('&#233;', "é")
+  tempWord = tempWord.replace('&#241;', "ñ")
+  tempWord = tempWord.replace('&#252;', "ü")
+  tempWord = tempWord.replace('&#225;', "á")
+  tempWord = tempWord.replace('&#246;', "ö")
+  tempWord = tempWord.replace('&#237;', "í")
+  tempWord = tempWord.replace('&#228;', "ä")
+  const regex = /&#(\d)+;/
+  tempWord = tempWord.replace(regex, 'á')
+
+  return tempWord
+}
+
+const getGoodMatches = async () => {
+  const matches = await Algo6Match.find({ IsNew: true })
+  return matches
+}
+
+const sendEmail = async () => {
+  console.log('SEND EMAIL')
+  const matches = await getGoodMatches()
+
+  console.log(matches)
+
+  if  (matches.length) {
+    var emailText = ''
+
+    for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
+      var match = matches[matchIndex]
+      emailText += (match.name + ' | ' + match.time + ' | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
+    }
+
+    console.log(emailText)
+  }
+}
+
+const deleteStrongTag = word => {
+  var tempWord = word.replace('<strong>', '')
+  tempWord = tempWord.replace('</strong>', '')
+  return tempWord
 }
 
 module.exports = router

@@ -25,7 +25,7 @@
                 <th style='min-width: 150px;'>Time(GMT - 4)</th>
                 <th>Name</th>
                 <th>Flag</th>
-                <th>Country</th>
+                <th>Competition</th>
                 <th>League</th>
                 <th>Style</th>
                 <th>Logic</th>
