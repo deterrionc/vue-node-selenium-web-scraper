@@ -74,8 +74,6 @@ const scrapeMatches = async () => {
       var competition = (competition_league.split(' - '))[0]
       var league = convertSpanishToEnglish((competition_league.split(' - '))[1])
 
-      console.log(league)
-
       let newAlgo6Match = new Algo6Match({
         time, flag, name, link, style, logic, competition, league
       })
@@ -113,14 +111,12 @@ const sendEmail = async () => {
   console.log('SEND EMAIL')
   const matches = await getGoodMatches()
 
-  console.log(matches)
-
   if  (matches.length) {
     var emailText = ''
 
     for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
       var match = matches[matchIndex]
-      emailText += (match.name + ' | ' + match.time + ' | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
+      emailText += (match.name + ' | ' + match.time.slice(0, 31) + ' | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
     }
 
     console.log(emailText)
