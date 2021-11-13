@@ -116,7 +116,7 @@ const sendEmail = async () => {
 
     for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
       var match = matches[matchIndex]
-      emailText += (match.name + ' | ' + String(match.time).slice(0, 24) + ' UTC | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
+      emailText += (match.name + ' | ' + String(new Date(match.time)).slice(0, 24) + ' UTC | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
     }
 
     console.log(emailText)
