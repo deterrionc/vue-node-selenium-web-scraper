@@ -14,6 +14,17 @@ const axios = require('axios')
 const Algo6Match = require('../../models/Algo6Match')
 const User = require('../../models/User')
 
+// For Scheduling
+const schedule = require('node-schedule')
+
+const ruleForScrape = new schedule.RecurrenceRule()
+ruleForScrape.hour = 0
+ruleForScrape.minute = 5
+
+const scheduleForScrape = schedule.scheduleJob(ruleForScrape, () => {
+  scrapeMatches()
+})
+
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
 
@@ -29,7 +40,6 @@ router.get('/scrapeMatches', async (req, res) => {
   console.log('SCRAPE ALGO 6 MATCHES')
 
   await scrapeMatches()
-  await sendEmail()
 
   res.json({
     success: true
@@ -84,6 +94,8 @@ const scrapeMatches = async () => {
 
     }
   }
+  
+  await sendEmail()
 }
 
 const convertSpanishToEnglish = word => {
@@ -112,7 +124,7 @@ const sendEmail = async () => {
   console.log('SEND EMAIL')
   const matches = await getGoodMatches()
 
-  if  (matches.length) {
+  if (matches.length) {
     var emailText = ''
 
     for (var matchIndex = 0; matchIndex < matches.length; matchIndex++) {
