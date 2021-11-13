@@ -12,6 +12,7 @@ const axios = require('axios')
 
 // MODELS
 const Algo6Match = require('../../models/Algo6Match')
+const User = require('../../models/User')
 
 router.get('/getMatches', async (req, res) => {
   console.log('GET ALGO 6 MATCHES')
@@ -119,7 +120,20 @@ const sendEmail = async () => {
       emailText += (match.name + ' | ' + String(new Date(match.time.valueOf() + 5 * 3600000)).slice(0, 21) + ' UTC | ' + match.competition + ' | ' + match.league + ' | ' + match.style + ' | ' + deleteStrongTag(match.logic) + '\n')
     }
 
-    console.log(emailText)
+    var users = await User.find()
+
+    for (var userIndex = 0; userIndex < users.length; userIndex++) {
+      var user = users[userIndex]
+      var emailContentToCustomer = {
+        from: 'Fyrebets <info@fyrebets.com>',
+        to: user.email,
+        subject: "Algo6 Over/Under. There are matches to bet.",
+        text: emailText
+      }
+      mailgun.messages().send(emailContentToCustomer, function (error, body) {
+        console.log(body)
+      })
+    }
   }
 }
 
