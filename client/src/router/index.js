@@ -36,7 +36,7 @@ export default new VueRouter({
       },
       children: [
         { path: "login", component: Login },
-        { path: "register", component: Register },
+        { path: "registeraaa", component: Register },
         { path: "", redirect: "/login" }
       ]
     },
