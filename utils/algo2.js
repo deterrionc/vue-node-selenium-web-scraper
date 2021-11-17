@@ -20,7 +20,7 @@ rule.hour = 1
 rule.minute = 0
 
 const j = schedule.scheduleJob(rule, () => {
-  scrapeMatchesToday()
+  scrapeMatches()
   sendAlgo2GooMatchesByEmail()
   sendAlgo4GooMatchesByEmail()
 })
