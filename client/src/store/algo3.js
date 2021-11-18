@@ -23,7 +23,7 @@ export default {
       }
     },
     async scrapeMatches(context) {
-      context.commit('setIsLoading', true)
+      this.commit('setIsLoading', true)
       const res = await api.get('/algo3/scrapeMatches')
       if (res.data.success) {
         context.dispatch('getMatches')
