@@ -20,10 +20,10 @@ const rule = new schedule.RecurrenceRule()
 // rule.minute = 0
 rule.second = 1
 
-const j = schedule.scheduleJob(rule, () => {
-  scrapeMatches()
-  sendAlgo2GooMatchesByEmail()
-  sendAlgo4GooMatchesByEmail()
+const j = schedule.scheduleJob(rule, async () => {
+  await scrapeMatches()
+  await sendAlgo2GooMatchesByEmail()
+  await sendAlgo4GooMatchesByEmail()
 })
 
 const scrapeMatches = async () => {
