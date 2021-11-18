@@ -16,8 +16,9 @@ var mailgun = require('mailgun-js')({ apiKey: mailgunApiKey, domain: mailgunDoma
 const schedule = require('node-schedule')
 
 const rule = new schedule.RecurrenceRule()
-rule.hour = 1
-rule.minute = 0
+// rule.hour = 1
+// rule.minute = 0
+rule.second = 1
 
 const j = schedule.scheduleJob(rule, () => {
   scrapeMatches()
@@ -78,6 +79,7 @@ const changeTimeToEst = (time) => {
 }
 
 const sendAlgo2GooMatchesByEmail = async () => {
+  console.log('SEND ALGO 2 EMAIL')
   var matchesFromDB = await Match25Tip.find({ IsNew: true })
   var matches = []
 
