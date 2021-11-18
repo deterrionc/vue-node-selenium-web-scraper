@@ -16,9 +16,8 @@ var mailgun = require('mailgun-js')({ apiKey: mailgunApiKey, domain: mailgunDoma
 const schedule = require('node-schedule')
 
 const rule = new schedule.RecurrenceRule()
-// rule.hour = 1
-// rule.minute = 0
-rule.second = 1
+rule.hour = 1
+rule.minute = 0
 
 const j = schedule.scheduleJob(rule, () => {
   scrapeMatches()
