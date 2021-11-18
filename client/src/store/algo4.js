@@ -26,7 +26,7 @@ export default {
       context.commit('setIsLoading', true)
       const res = await api.get('/algo4/scrapeMatches')
       if (res.data.success) {
-        this.commit('setIsLoading', true)
+        context.dispatch('getMatches')
       }
     },
   }
