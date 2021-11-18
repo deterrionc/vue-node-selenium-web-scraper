@@ -111,7 +111,7 @@ const sendAlgo2GooMatchesByEmail = async () => {
     var emailText = ''
 
     for (var matchIndex = 0; matchIndex < matchesFromDB.length; matchIndex++) {
-      var match = matchesForEmail[matchIndex]
+      var match = matchesFromDB[matchIndex]
       emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
     }
 
@@ -157,7 +157,7 @@ const sendAlgo4GooMatchesByEmail = async () => {
     var emailText = ''
 
     for (var matchIndex = 0; matchIndex < matchesFromDB.length; matchIndex++) {
-      var match = matchesForEmail[matchIndex]
+      var match = matchesFromDB[matchIndex]
       emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
     }
 
