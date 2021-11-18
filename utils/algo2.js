@@ -132,6 +132,7 @@ const sendAlgo2GooMatchesByEmail = async () => {
 }
 
 const sendAlgo4GooMatchesByEmail = async () => {
+  console.log('SEND ALGO 2 EMAIL')
   var matchesFromDB = await Match25Tip.find({ IsNew: true })
   var matches = []
 
