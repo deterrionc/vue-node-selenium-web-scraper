@@ -125,6 +125,7 @@ const scrapePredictionMatches = async () => {
     }
 
     var goodPredictions = await getGoodPredictions()
+    console.log(goodPredictions)
     await sendCustomersEmailGoodMatches(goodPredictions)
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 3 --------------')
