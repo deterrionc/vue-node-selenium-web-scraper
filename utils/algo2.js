@@ -105,13 +105,13 @@ const sendAlgo2GooMatchesByEmail = async () => {
 
   var matchesForEmail = matches.filter(match => match.risk === 'Medium 1' || match.risk === 'Medium 2' || match.risk === 'Medium 3' || match.risk === 'Good 1' || match.risk === 'Good 2')
 
-  if (matchesFromDB.length) {
+  if (matchesForEmail.length) {
     var users = await User.find()
 
     var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < matchesFromDB.length; matchIndex++) {
-      var match = matchesFromDB[matchIndex]
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
       emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
     }
 
@@ -151,13 +151,13 @@ const sendAlgo4GooMatchesByEmail = async () => {
 
   var matchesForEmail = matches.filter(match => match.risk === 'Good T1' || match.risk === 'Good T2' || match.risk === 'Great')
 
-  if (matchesFromDB.length) {
+  if (matchesForEmail.length) {
     var users = await User.find()
 
     var emailText = ''
 
-    for (var matchIndex = 0; matchIndex < matchesFromDB.length; matchIndex++) {
-      var match = matchesFromDB[matchIndex]
+    for (var matchIndex = 0; matchIndex < matchesForEmail.length; matchIndex++) {
+      var match = matchesForEmail[matchIndex]
       emailText += (match.homeTeam + ' - ' + match.awayTeam + ' | ' + match.league + ' | ' + match.time + '(EST GMT - 4 / Today) | ' + 'Style: Over / Under | Risk: ' + match.risk + '\n\n')
     }
 
