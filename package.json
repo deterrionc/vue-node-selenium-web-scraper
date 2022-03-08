@@ -1,6 +1,6 @@
 {
   "name": "oddsportal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "scraping for oddsportal",
   "main": "server.js",
   "scripts": {
