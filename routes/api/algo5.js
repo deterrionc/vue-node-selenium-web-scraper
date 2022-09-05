@@ -36,9 +36,9 @@ router.get('/scrapeMatches', async (req, res) => {
 
   await driver.get('https://www.whoscored.com/Betting/Facts')
   await driver.sleep(5000)
-  var htmlContent = await driver.findElement(By.id('layout-wrapper'))
-  htmlContent = await htmlContent.getAttribute('innerHTML')
-  console.log(htmlContent)
+  // var htmlContent = await driver.findElement(By.id('layout-wrapper'))
+  // htmlContent = await htmlContent.getAttribute('innerHTML')
+  // console.log(htmlContent)
   // await driver.findElement(By.xpath('//div[@id="facts-filter-matchMarket"]/select[@class="filter-drop"]')).click()
   // await driver.findElement(By.xpath("//option[@data-source='ou']")).click()
 
