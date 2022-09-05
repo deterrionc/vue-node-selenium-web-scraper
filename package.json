@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
-    "chromedriver": "^96.0.0",
+    "chromedriver": "^95.0.0",
     "client": "file:client",
     "compression": "^1.7.4",
     "config": "^3.3.3",
