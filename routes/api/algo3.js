@@ -70,23 +70,23 @@ const scrapePredictionMatches = async () => {
     await Prediction.updateMany({ IsNew: true }, { IsNew: false })
 
     var htmlContent = (await axios.get('https://www.over25tips.com/statistics/teams-which-are-involved-in-the-most-games-where-there-are-over-25-goals.html')).data
-    var startPos = htmlContent.indexOf('<div class="top-25-teams">')
-    var endPos = htmlContent.indexOf('<div class="col-xs-12 col-lg-3 col-md-12">')
+    var startPos = htmlContent.indexOf('class="top-25-teams"')
+    var endPos = htmlContent.indexOf('ezoic-pub-ad-placeholder-106')
     var tableContent = htmlContent.slice(startPos, endPos)
-    var teamDivs = tableContent.split('<div class="top-25-teams-item')
+    var teamDivs = tableContent.split('class="top-25-teams-item ')
     teamDivs.shift()
-    teamDivs.shift()
+
     for (var i = 0; i < teamDivs.length; i++) {
       var teamDiv = teamDivs[i]
       var teamDetailDivs = teamDiv.split('</div>')
       var winningTeam = teamDetailDivs[0].slice(teamDetailDivs[0].lastIndexOf('">') + 2, teamDetailDivs[0][teamDetailDivs[0].length])
       var percent = teamDetailDivs[1].slice(teamDetailDivs[1].lastIndexOf('>') + 1, teamDetailDivs[1].indexOf('%'))
       var link = teamDetailDivs[2].slice(teamDetailDivs[2].indexOf('href=') + 6, teamDetailDivs[2].indexOf('.html') + 5)
-      link = link.slice(link.indexOf('predictions/') + 12, link.indexOf('-202'))
+      link = link.slice(link.indexOf('predictions/') + 12)
 
       if (link.length && percent > 85) {
-        link = 'https://www.over25tips.com/football/prediction/' + link + '.html'
-        var match = teamDetailDivs[2].slice(teamDetailDivs[2].lastIndexOf("'>") + 2, teamDetailDivs[2].lastIndexOf('</a>'))
+        link = 'https://www.over25tips.com/football/prediction/' + link
+        var match = teamDetailDivs[2].slice(teamDetailDivs[2].lastIndexOf('">') + 2, teamDetailDivs[2].lastIndexOf('</a>'))
         var teamNames = match.split(' vs ')
         var firstTeam = teamNames[0]
         var secondTeam = teamNames[1]
@@ -95,10 +95,10 @@ const scrapePredictionMatches = async () => {
         var endPos1 = matchHtmlContent.indexOf('<div class="col-lg-4 col-xs-4 pp0">')
         var targetDivContent = matchHtmlContent.slice(startPos1, endPos1)
         var countryLeague = targetDivContent.slice(targetDivContent.indexOf('</span>') + 7, targetDivContent.indexOf('</b>'))
-        countryLeague = countryLeague.split(' - ')
+        countryLeague = countryLeague.split('  ')
         var country = countryLeague[0].trim()
         var league = countryLeague[1]
-        var date = targetDivContent.slice(targetDivContent.indexOf('sp;</b>') + 7, targetDivContent.indexOf('<br><b>Day'))
+        var date = targetDivContent.slice(targetDivContent.indexOf('Date of fixture') + 22, targetDivContent.indexOf('<br/><b>Day'))
         var oddLink = '/#over-under;2'
         var handicapOver = null
 
@@ -128,7 +128,7 @@ const scrapePredictionMatches = async () => {
     await sendCustomersEmailGoodMatches(goodPredictions)
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 3 --------------')
-    console.log(error)
+    // console.log(error)
   }
 }
 
@@ -146,6 +146,7 @@ const getTodayOddsMatcheNames = async () => {
     await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
     await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
     await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+    await driver.sleep(5000)
 
     await driver.get('https://www.oddsportal.com/matches/soccer/')
     await driver.findElement(By.id('user-header-oddsformat-expander')).click()
@@ -255,7 +256,7 @@ const deleteMatchNameSpan = (matchName) => {
 }
 
 const getGoodPredictions = async () => {
-  const predictionsFromDB = await Prediction.find({IsNew: true})
+  const predictionsFromDB = await Prediction.find({ IsNew: true })
   var date = new Date()
   var year = date.getFullYear()
   var month = date.getMonth() + 1
