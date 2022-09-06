@@ -30,7 +30,7 @@ const scrapeMatches = async () => {
     await Match25Tip.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
     var htmlContent = (await axios.get('https://www.over25tips.com/')).data
-    var startPos = htmlContent.indexOf('<table class="predictionsTable">')
+    var startPos = htmlContent.indexOf('class="predictionsTable"')
     var endPos = htmlContent.indexOf('</table>')
     var tableContent = htmlContent.slice(startPos, endPos)
     var tableTrs = tableContent.split('</tr>')
@@ -40,18 +40,20 @@ const scrapeMatches = async () => {
       var tableTr = tableTrs[i]
       var tableTds = tableTr.split('</td>')
       tableTds.pop()
-      var time = tableTds[0].split('>').pop()
+      var time = tableTds[0].split('>')
+      time = (time[3].split('</'))[0]
       time = changeTimeToEst(time)
       var league = tableTds[1].slice(tableTds[1].indexOf('</span> ') + 8, tableTds[1].length)
-      var homeTeam = (tableTds[2].slice(tableTds[2].indexOf('">') + 2, tableTds[2].length - 8)).trim()
-      var awayTeam = tableTds[4].slice(tableTds[4].indexOf('">') + 2, tableTds[4].length - 8).trim()
-      var h1 = tableTds[5].slice(tableTds[5].indexOf('"h1">') + 5, tableTds[5].indexOf('</span>'))
-      var h2 = tableTds[6].slice(tableTds[6].indexOf('"h2">') + 6, tableTds[6].indexOf('</span>'))
-      var a1 = tableTds[7].slice(tableTds[7].indexOf('"a1">') + 5, tableTds[7].indexOf('</span>'))
-      var a2 = tableTds[8].slice(tableTds[8].indexOf('"a2">') + 5, tableTds[8].indexOf('</span>'))
-      var a3 = tableTds[9].slice(tableTds[9].indexOf('"a3">') + 5, tableTds[9].indexOf('</span>'))
-      var a4 = tableTds[10].slice(tableTds[10].indexOf('"a4">') + 5, tableTds[10].indexOf('</span>'))
-      var probability = tableTds[15].slice(tableTds[15].indexOf("25'>") + 4, tableTds[15].indexOf('%</span>'))
+      league = (league.split('</span>'))[0]
+      var homeTeam = (tableTds[2].slice(tableTds[2].indexOf('"name">') + 7, tableTds[2].indexOf('</span>'))).trim()
+      var awayTeam = tableTds[8].slice(tableTds[8].indexOf('"name">') + 7, tableTds[8].indexOf('</span>')).trim()
+      var h1 = tableTds[13].slice(tableTds[13].indexOf('"h1">') + 5, tableTds[13].indexOf('</span>'))
+      var h2 = tableTds[14].slice(tableTds[14].indexOf('"h2">') + 6, tableTds[14].indexOf('</span>'))
+      var a1 = tableTds[15].slice(tableTds[15].indexOf('"a1">') + 5, tableTds[15].indexOf('</span>'))
+      var a2 = tableTds[16].slice(tableTds[16].indexOf('"a2">') + 5, tableTds[16].indexOf('</span>'))
+      var a3 = tableTds[17].slice(tableTds[17].indexOf('"a3">') + 5, tableTds[17].indexOf('</span>'))
+      var a4 = tableTds[18].slice(tableTds[18].indexOf('"a4">') + 5, tableTds[18].indexOf('</span>'))
+      var probability = tableTds[23].slice(tableTds[23].indexOf('25">') + 4, tableTds[23].indexOf('%</span>'))
       var newMatch = new Match25Tip({
         time, league, homeTeam, awayTeam, h1, h2, a1, a2, a3, a4, probability
       })
