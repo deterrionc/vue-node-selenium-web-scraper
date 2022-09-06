@@ -813,7 +813,7 @@ const scrapeMatchesToday = async () => {
     await driver.close()
     await driver.quit()
 
-    // await sendCustomersEmailGoodMatches()
+    await sendCustomersEmailGoodMatches()
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 1 --------------')
     console.log(error)
