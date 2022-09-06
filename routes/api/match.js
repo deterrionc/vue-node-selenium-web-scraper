@@ -729,7 +729,7 @@ const scrapeMatchesToday = async () => {
     await OddsData.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
     await driver.get('https://www.oddsportal.com/login/')
-    await driver.findElement(By.id('onetrust-accept-btn-handler')).click()
+    // await driver.findElement(By.id('onetrust-accept-btn-handler')).click()
     await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
     await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
     await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
