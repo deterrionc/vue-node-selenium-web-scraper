@@ -14,6 +14,7 @@ const Match = require('../../models/Match')
 const OddsData = require('../../models/OddsData')
 const User = require('../../models/User')
 
+// Selenium Webdriver
 const webdriver = require('selenium-webdriver')
 const chromeDriver = require('selenium-webdriver/chrome')
 const path = require('chromedriver').path
@@ -717,20 +718,22 @@ router.get('/scrapeMatchesToday', async (req, res) => {
 const scrapeMatchesToday = async () => {
   console.log('Scrape Matches Today')
 
+  const driver = await new webdriver.Builder()
+    .withCapabilities(webdriver.Capabilities.chrome())
+    .forBrowser('chrome')
+    .setChromeOptions(options)
+    .build()
+
   try {
     await Match.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
     await OddsData.updateMany({ IsNew: true }, { IsNew: false }, { new: true })
 
-    const driver = await new webdriver.Builder()
-      .withCapabilities(webdriver.Capabilities.chrome())
-      .forBrowser('chrome')
-      .setChromeOptions(options)
-      .build()
-
     await driver.get('https://www.oddsportal.com/login/')
+    await driver.findElement(By.id('onetrust-accept-btn-handler')).click()
     await driver.findElement(By.name('login-username')).sendKeys('sbhooley')
     await driver.findElement(By.name('login-password')).sendKeys('Access2020$')
     await driver.findElement(By.xpath("//div[@class='item']/button[@type='submit']")).click()
+    await driver.sleep(5000)
 
     await driver.get('https://www.oddsportal.com/matches/soccer/')
     await driver.findElement(By.id('user-header-oddsformat-expander')).click()
@@ -809,7 +812,7 @@ const scrapeMatchesToday = async () => {
     await driver.close()
     await driver.quit()
 
-    await sendCustomersEmailGoodMatches()
+    // await sendCustomersEmailGoodMatches()
   } catch (error) {
     console.log('------------- SOMETHING WENT WRONG ON ALGO 1 --------------')
     console.log(error)
